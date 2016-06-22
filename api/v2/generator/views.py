@@ -10,6 +10,7 @@ from ostinato_light.drone import Drone
 from ostinato_light.port_list import PortList
 from ostinato_light.stream_list import StreamList
 import json
+import traceback
 from ostinato_light.protocols import *
 
 
@@ -54,23 +55,47 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return default
 
     def get_protocol_class(self, protocol_class_name):
-        protocol_class_mapping = dict(mac=MAC,)
+        protocol_class_mapping = dict(mac=MAC,
+                                      vlan=VLAN,
+                                      vlanstack=VLANStack,
+
+                                      ethernet=Ethernet,
+
+                                      ip4=IP4,
+                                      arp=ARP,
+                                      tcp=TCP,
+                                      udp=UDP,
+                                      icmp=ICMP,
+                                      igmp=IGMP,
+                                      igmpipaddress=IGMPIPAddress,
+
+                                      textprotocol=TextProtocol,
+                                      payload=Payload,
+                                      hexdump=HexDump,
+                                      userscript=UserScript
+        )
+        
+        # log_nsr_service.warning(protocol_class_name)
         if protocol_class_name.lower() in protocol_class_mapping.keys():
             return protocol_class_mapping[protocol_class_name.lower()]
         return None
 
     def configure_protocol(self, protocol_configuration):
+
         if isinstance(protocol_configuration, dict):
             for field_name, configuration in protocol_configuration.items():
                 protocol_configuration[field_name] = self.configure_protocol(configuration)
-            protocol_class = self.get_protocol_class(protocol_configuration['protocol_class_name'])
+            protocol_class = self.get_protocol_class(protocol_configuration.pop('protocol_class_name', None))
             if protocol_class is None:
                 return None
             else:
                 return protocol_class(**protocol_configuration)
         elif isinstance(protocol_configuration, list):
             for index, configuration in enumerate(protocol_configuration):
+                # log_nsr_service.warning(index)
+                # log_nsr_service.warning(configuration)
                 protocol_configuration[index] = self.configure_protocol(configuration)
+            return protocol_configuration
         else:
             return protocol_configuration
 
@@ -78,13 +103,13 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         streams = StreamModel.objects.filter(generator=generator_id)
         for stream in streams:
             stream_configuration = json.loads(stream.configuration)
-            for k,v in stream_configuration.items():
-                log_nsr_service.warning(k + '  ' + str(v))
+            # for k,v in stream_configuration.items():
+            #     log_nsr_service.warning(k + '  ' + str(v))
             stream_list.add_stream(**stream_configuration)
             protocols = ProtocolModel.objects.filter(stream=stream.id)
             protocol_list = list()
             for protocol in protocols:
-                protocol_configuration = protocol.configuration
+                protocol_configuration = json.loads(protocol.configuration)
                 protocol_object = self.configure_protocol(protocol_configuration)
                 if protocol_object is not None:
                     protocol_list.append(protocol_object)
@@ -108,38 +133,6 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 drone = Drone(host_name=host_name, tx_port_list=tx_port_list)
                 drone.connect()
 
-
-                # stream_list.add_stream(is_stream_packet_size_random_mode=True,
-                #                      stream_packet_size_random_min_bytes=800,
-                #                      stream_packet_size_random_max_bytes=1200,
-                #                      stream_packet_num=100,
-                #                      stream_packets_per_second=50)
-                # stream_list.current_stream.configure_protocols(MAC(src_mac='ab:cd:ef:11:00:22',
-                #                                                 dst_mac='00:11:22:33:44:55',
-                #                                                 src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
-                #                                             Ethernet(),
-                #                                             IP4(src_ip='1.1.1.1',
-                #                                                 dst_ip='2.2.2.2'),
-                #                                             TCP(src_port=77,
-                #                                                 dst_port=90),
-                #                                             )
-
-
-                # stream_list.add_stream(is_stream_packet_size_random_mode=True,
-                #                      stream_packet_size_random_min_bytes=800,
-                #                      stream_packet_size_random_max_bytes=1200,
-                #                      stream_packet_num=100,
-                #                      stream_packets_per_second=30)
-                # stream_list.current_stream.configure_protocols(MAC(src_mac='ab:cd:ef:11:00:22',
-                #                                                 dst_mac='00:11:22:33:44:55',
-                #                                                 src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
-                #                                             Ethernet(),
-                #                                             IP4(src_ip='1.1.1.1',
-                #                                                 dst_ip='2.2.2.2'),
-                #                                             TCP(src_port=77,
-                #                                                 dst_port=90),
-                #                                             )
-
                 if status == 'Transmititing':
                     drone.stop_transmit()
                     current_stream_id_list = drone.fetch_stream_id_list()
@@ -158,8 +151,10 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 drone.disconnect()
             serializer.save()
             log_nsr_service.warning('Drone setup successful')
-        except:
+        except Exception, e:
             self.perform_error_status = http_response_status.HTTP_304_NOT_MODIFIED
+            log_nsr_service.warning(e)
+            traceback.print_exc()
             log_nsr_service.warning('Drone has not been started up')
 
     def update(self, request, *args, **kwargs):
