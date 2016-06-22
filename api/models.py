@@ -1,16 +1,24 @@
 from django.db import models
-
+from django.contrib import admin
 # Create your models here.
 
 
 class GeneratorModel(models.Model):
+    STATUS_CHOICES = (
+        (u'Transmititing', u'Transmititing'),
+        (u'Idle', u'Idle'),
+    )
+
     id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
     created = models.DateTimeField(auto_now_add=True)
-    ip = models.GenericIPAddressField(default='127.0.0.1')
+    ip = models.GenericIPAddressField()
     port = models.IntegerField(
         default=0
     )
-    is_busy = models.BooleanField(default=False)
+    tx_rate = models.IntegerField(
+        default=0
+    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     # owner = models.ForeignKey('auth.User', related_name='generator')
 
     class Meta:
@@ -18,7 +26,7 @@ class GeneratorModel(models.Model):
 
     def __unicode__(self):
         return 'id: %s  ip: %s ' % (self.id, self.ip)
-
+admin.site.register(GeneratorModel)
 
 class StreamModel(models.Model):
     id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")

@@ -5,6 +5,12 @@ from .urls import API_VERSION
 
 @api_view(['GET'])
 def api_version_root(request, format=None):
+    '''
+    qweqwe
+    :param request:
+    :param format:
+    :return:
+    '''
     full_url = 'http://' + request.get_host() + request.path
     api_version_url = {}
     for version_name in API_VERSION.keys():

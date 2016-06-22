@@ -13,7 +13,6 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
         lookup_url_kwarg='parent_lookup_switch_pk',
     )
 
-    aa = 3
     class Meta:
         model = SwitchModel
         fields = ('id',
@@ -22,7 +21,6 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
                   'user',
                   'password',
                   'vlans',
-                  'aa'
         )
 
 
