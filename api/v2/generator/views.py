@@ -9,6 +9,7 @@ from utils.nsr_log import log_nsr_service
 from ostinato_light.drone import Drone
 from ostinato_light.port_list import PortList
 from ostinato_light.stream_list import StreamList
+import json
 from ostinato_light.protocols import *
 
 
@@ -52,10 +53,50 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         else:
             return default
 
+    def get_protocol_class(self, protocol_class_name):
+        protocol_class_mapping = dict(mac=MAC,)
+        if protocol_class_name.lower() in protocol_class_mapping.keys():
+            return protocol_class_mapping[protocol_class_name.lower()]
+        return None
+
+    def configure_protocol(self, protocol_configuration):
+        if isinstance(protocol_configuration, dict):
+            for field_name, configuration in protocol_configuration.items():
+                protocol_configuration[field_name] = self.configure_protocol(configuration)
+            protocol_class = self.get_protocol_class(protocol_configuration['protocol_class_name'])
+            if protocol_class is None:
+                return None
+            else:
+                return protocol_class(**protocol_configuration)
+        elif isinstance(protocol_configuration, list):
+            for index, configuration in enumerate(protocol_configuration):
+                protocol_configuration[index] = self.configure_protocol(configuration)
+        else:
+            return protocol_configuration
+
+    def configure_stream_list(self, generator_id, stream_list):
+        streams = StreamModel.objects.filter(generator=generator_id)
+        for stream in streams:
+            stream_configuration = json.loads(stream.configuration)
+            for k,v in stream_configuration.items():
+                log_nsr_service.warning(k + '  ' + str(v))
+            stream_list.add_stream(**stream_configuration)
+            protocols = ProtocolModel.objects.filter(stream=stream.id)
+            protocol_list = list()
+            for protocol in protocols:
+                protocol_configuration = protocol.configuration
+                protocol_object = self.configure_protocol(protocol_configuration)
+                if protocol_object is not None:
+                    protocol_list.append(protocol_object)
+            stream_list.current_stream.configure_protocols(*protocol_list)
+
+
     def perform_update(self, serializer):
         instance = self.get_object()
         initial_data = serializer.initial_data
+        generator_id = self.perform_get_data(initial_data=initial_data, field='id', default=instance.id)
         status = self.perform_get_data(initial_data=initial_data, field='status', default=instance.status)
+        mode = self.perform_get_data(initial_data=initial_data, field='mode', default=instance.mode)
         tx_port_number = self.perform_get_data(initial_data=initial_data, field='port', default=instance.port)
         host_name = self.perform_get_data(initial_data=initial_data, field='ip', default=instance.ip)
         self.perform_error_status = None
@@ -66,7 +107,8 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 tx_port = tx_port_list.current_port
                 drone = Drone(host_name=host_name, tx_port_list=tx_port_list)
                 drone.connect()
-                # stream_list = StreamList(tx_port=tx_port, is_loop_mode=True)
+
+
                 # stream_list.add_stream(is_stream_packet_size_random_mode=True,
                 #                      stream_packet_size_random_min_bytes=800,
                 #                      stream_packet_size_random_max_bytes=1200,
@@ -81,8 +123,8 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 #                                             TCP(src_port=77,
                 #                                                 dst_port=90),
                 #                                             )
-                #
-                # stream_list = StreamList(tx_port=tx_port, is_loop_mode=True)
+
+
                 # stream_list.add_stream(is_stream_packet_size_random_mode=True,
                 #                      stream_packet_size_random_min_bytes=800,
                 #                      stream_packet_size_random_max_bytes=1200,
@@ -97,9 +139,18 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 #                                             TCP(src_port=77,
                 #                                                 dst_port=90),
                 #                                             )
-                # drone.add_stream_list(stream_list)
-                # drone.remove_stream_list(drone.fetch_stream_id_list())
+
                 if status == 'Transmititing':
+                    drone.stop_transmit()
+                    current_stream_id_list = drone.fetch_stream_id_list()
+                    drone.remove_stream_list(current_stream_id_list)
+                    if mode == 'Loop':
+                        is_loop_mode = True
+                    else:
+                        is_loop_mode = False
+                    stream_list = StreamList(tx_port=tx_port, is_loop_mode=is_loop_mode)
+                    self.configure_stream_list(generator_id=generator_id, stream_list=stream_list)
+                    drone.add_stream_list(stream_list)
                     drone.start_transmit()
                 else:
                     drone.stop_transmit()

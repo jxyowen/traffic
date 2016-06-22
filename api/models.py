@@ -9,6 +9,11 @@ class GeneratorModel(models.Model):
         (u'Idle', u'Idle'),
     )
 
+    MODE_CHOICES = (
+        (u'Loop', u'Loop'),
+        (u'Normal', u'Normal'),
+    )
+
     id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
     created = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField()
@@ -19,6 +24,7 @@ class GeneratorModel(models.Model):
         default=0
     )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default=u'Normal')
     # owner = models.ForeignKey('auth.User', related_name='generator')
 
     class Meta:
@@ -28,21 +34,23 @@ class GeneratorModel(models.Model):
         return 'id: %s  ip: %s ' % (self.id, self.ip)
 admin.site.register(GeneratorModel)
 
+
 class StreamModel(models.Model):
-    id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
+    id = models.AutoField(max_length=10, primary_key=True, verbose_name="ID")
     generator = models.ForeignKey(GeneratorModel, null=False)
     created = models.DateTimeField(auto_now_add=True)
 
     configuration = models.TextField()
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('id',)
 
     def __unicode__(self):
         return 'id: %s  configuration: %s ' % (self.id, self.configuration)
 
+
 class ProtocolModel(models.Model):
-    id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
+    id = models.AutoField(max_length=10, primary_key=True, verbose_name="ID")
     stream = models.ForeignKey(StreamModel, null=False)
     # generator = models.ForeignKey(GeneratorModel, null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -50,7 +58,7 @@ class ProtocolModel(models.Model):
     configuration = models.TextField()
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('id',)
 
     def __unicode__(self):
         return 'id: %s  configuration: %s ' % (self.id, self.configuration)

@@ -49,16 +49,16 @@ while True:
             #                          stream_packet_size_random_max_bytes=1200,
             #                          stream_packet_num=1000,
             #                          stream_packets_per_second=100)
-            # stream_list.current_stream.configure_protocols(MAC(src_mac='ab:cd:ef:11:00:22',
-            #                                                     dst_mac='00:11:22:33:44:55',
-            #                                                     src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
-            #                                                 Ethernet(),
-            #                                                 IP4(src_ip='10.10.20.38',
-            #                                                     dst_ip='10.10.20.39'),
-            #                                                 IGMP(type=0xfe11,
-            #                                                      group_address=IGMPIPAddress(v4='222.168.10.22'),
-            #                                                      sources=[IGMPIPAddress(v4='111.168.10.22'), IGMPIPAddress(v4='29.168.10.22')]),
-            #                                                 )
+            stream_list.current_stream.configure_protocols(MAC(src_mac='ab:cd:ef:11:00:22',
+                                                                dst_mac='00:11:22:33:44:55',
+                                                                src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
+                                                            Ethernet(),
+                                                            IP4(src_ip='10.10.20.38',
+                                                                dst_ip='10.10.20.39'),
+                                                            IGMP(type=0xfe11,
+                                                                 group_address=IGMPIPAddress(v4='222.168.10.22'),
+                                                                 sources=[IGMPIPAddress(v4='111.168.10.22'), IGMPIPAddress(v4='29.168.10.22')]),
+                                                            )
             #
             # stream_list.add_stream(is_stream_packet_size_random_mode=True,
             #                          stream_packet_size_random_min_bytes=800,

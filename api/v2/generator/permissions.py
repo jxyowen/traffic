@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-GENERATOR_METHODS = ('GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE')
+GENERATOR_METHODS = ('GET', 'HEAD', 'OPTIONS', 'PUT', 'PATCH', 'DELETE')
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """

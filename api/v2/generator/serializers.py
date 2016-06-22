@@ -22,6 +22,7 @@ class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
                   'port',
                   'tx_rate',
                   'status',
+                  'mode',
                   'streams'
         )
 
