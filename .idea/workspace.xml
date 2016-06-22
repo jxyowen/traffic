@@ -44,8 +44,8 @@
       <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.42299107" vertical-offset="1943" max-vertical-offset="6507">
-              <caret line="86" column="28" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.80046135" vertical-offset="2168" max-vertical-offset="5967">
+              <caret line="106" column="92" selection-start-line="106" selection-start-column="92" selection-end-line="106" selection-end-column="92" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
               </folding>
@@ -66,8 +66,8 @@
       <file leaf-file-name="ostinato_controller.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/v2/generator/ostinato_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1021" max-vertical-offset="4671">
-              <caret line="59" column="122" selection-start-line="59" selection-start-column="109" selection-end-line="59" selection-end-column="122" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1215" max-vertical-offset="4671">
+              <caret line="59" column="87" selection-start-line="59" selection-start-column="74" selection-end-line="59" selection-end-column="87" />
               <folding>
                 <element signature="e#20#58#0" expanded="true" />
               </folding>
@@ -78,7 +78,7 @@
       <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="2781">
+            <state vertical-scroll-proportion="0.0" vertical-offset="729" max-vertical-offset="2781">
               <caret line="42" column="17" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="17" />
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
@@ -651,13 +651,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/Python27/Lib/site-packages/rest_framework/filters.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48325893" vertical-offset="1538" max-vertical-offset="8235">
-          <caret line="88" column="50" selection-start-line="88" selection-start-column="38" selection-end-line="88" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/django/shortcuts.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2421875" vertical-offset="3131" max-vertical-offset="5508">
@@ -988,16 +981,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="2781">
-          <caret line="42" column="17" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#28#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/ostinato_light/protocols/base/protocol_base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09173273" vertical-offset="0" max-vertical-offset="2862">
@@ -1022,29 +1005,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/v2/generator/permissions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="594">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/ostinato_light/stream.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5479911" vertical-offset="562" max-vertical-offset="1458">
           <caret line="40" column="8" selection-start-line="40" selection-start-column="8" selection-end-line="40" selection-end-column="8" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/api/v2/generator/ostinato_controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1021" max-vertical-offset="4671">
-          <caret line="59" column="122" selection-start-line="59" selection-start-column="109" selection-end-line="59" selection-end-column="122" />
-          <folding>
-            <element signature="e#20#58#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1066,10 +1031,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/ostinato_light/protocols/ethernet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15066965" vertical-offset="0" max-vertical-offset="896">
+          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="2781">
+          <caret line="42" column="17" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/v2/generator/permissions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="594">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/v2/generator/ostinato_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1215" max-vertical-offset="4671">
+          <caret line="59" column="87" selection-start-line="59" selection-start-column="74" selection-end-line="59" selection-end-column="87" />
+          <folding>
+            <element signature="e#20#58#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42299107" vertical-offset="1943" max-vertical-offset="6507">
-          <caret line="86" column="28" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.80046135" vertical-offset="2168" max-vertical-offset="5967">
+          <caret line="106" column="92" selection-start-line="106" selection-start-column="92" selection-end-line="106" selection-end-column="92" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
           </folding>
