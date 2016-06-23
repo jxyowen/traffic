@@ -39,8 +39,7 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     #
     #     return '流量生成器'
 
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
+    def generators_parameters_fetch_from_drone(self, instance):
         try:
             tx_port_number = instance.port
             host_name = instance.ip
@@ -62,6 +61,22 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             instance.tx_rate = -1
             log_nsr_service.warning('Drone has not been started up')
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        for generator in queryset:
+            self.generators_parameters_fetch_from_drone(generator)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.generators_parameters_fetch_from_drone(instance)
         serializer = self.get_serializer(instance)
 
         return Response(serializer.data)

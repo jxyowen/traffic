@@ -1,10 +1,16 @@
+# -*- coding:utf-8 -*-
+import json
+import traceback
+
 from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework_extensions.mixins import NestedViewSetMixin
+from rest_framework import status as http_response_status
+
+from utils.nsr_log import log_nsr_service
+
 from .serializers import *
 from .permissions import IsOwnerOrReadOnly
-from rest_framework_extensions.mixins import NestedViewSetMixin
-from rest_framework import status
-
 
 
 class SwtichViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
