@@ -60,20 +60,20 @@ while True:
                                                                  sources=[IGMPIPAddress(v4='111.168.10.22'), IGMPIPAddress(v4='29.168.10.22')]),
                                                             )
             #
-            # stream_list.add_stream(is_stream_packet_size_random_mode=True,
-            #                          stream_packet_size_random_min_bytes=800,
-            #                          stream_packet_size_random_max_bytes=1200,
-            #                          stream_packet_num=100,
-            #                          stream_packets_per_second=100)
-            # stream_list.current_stream.configure_protocols(MAC(src_mac='ab:cd:ef:11:00:22',
-            #                                                     dst_mac='00:11:22:33:44:55',
-            #                                                     src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
-            #                                                 Ethernet(),
-            #                                                 IP4(src_ip='10.10.20.38',
-            #                                                     dst_ip='10.10.20.39'),
-            #                                                 TCP(src_port=77,
-            #                                                     dst_port=90),
-            #                                                 )
+            stream_list.add_stream(is_stream_packet_size_random_mode=True,
+                                     stream_packet_size_random_min_bytes=800,
+                                     stream_packet_size_random_max_bytes=1200,
+                                     stream_packet_num=100,
+                                     stream_packets_per_second=100)
+            stream_list.current_stream.configure_protocols(MAC(src_mac='ab:cd:ef:11:00:22',
+                                                                dst_mac='00:11:22:33:44:55',
+                                                                src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
+                                                            Ethernet(),
+                                                            IP4(src_ip='10.10.20.38',
+                                                                dst_ip='10.10.20.39'),
+                                                            TCP(src_port=77,
+                                                                dst_port=90),
+                                                            )
             #
             # stream_list.add_stream(stream_average_bps=1000*20)
             # stream_list.current_stream.configure_protocols(MAC(src_mac='FE:DC:BA:99:88:77',
@@ -119,22 +119,22 @@ while True:
             #                                                 ICMP()
             #                                                 )
 
-            stream_list.add_stream(stream_average_bps=1024*1024*1000,
-                                    stream_packet_size_bytes=150,
-                                    stream_duration_second=5)
-            stream_list.current_stream.configure_protocols(MAC(src_mac='FE:DC:BA:99:88:77',
-                                                                dst_mac='55:Ab:2E:ff:dd:ee',
-                                                                src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
-                                                            Ethernet(),
-                                                            IP4(src_ip='10.10.20.38',
-                                                                src_ip_mask='255.255.255.0',
-                                                                src_ip_mode=Enum.IP4_ADDRESS_MODE_RANDOM,
-                                                                dst_ip='10.10.20.39'),
-                                                            TCP(),
-                                                            TextProtocol(text='GET /index.html HTTP/1.1\x0aconnection: close\x0aHost: www.google.cn\x0a\x0a',
-                                                                         eol=Enum.TEXT_PROTOCOL_END_OF_LINE_CRLF),
-                                                            HexDump(content='\x124Vx\xad\xef\xdf"E4\xed\xdf\xad#B?\xdf\xdf#'),
-                                                            )
+            # stream_list.add_stream(stream_average_bps=1024*1024*1000,
+            #                         stream_packet_size_bytes=150,
+            #                         stream_duration_second=5)
+            # stream_list.current_stream.configure_protocols(MAC(src_mac='FE:DC:BA:99:88:77',
+            #                                                     dst_mac='55:Ab:2E:ff:dd:ee',
+            #                                                     src_mac_mode=Enum.MAC_ADDRESS_MODE_FIEXD),
+            #                                                 Ethernet(),
+            #                                                 IP4(src_ip='10.10.20.38',
+            #                                                     src_ip_mask='255.255.255.0',
+            #                                                     src_ip_mode=Enum.IP4_ADDRESS_MODE_RANDOM,
+            #                                                     dst_ip='10.10.20.39'),
+            #                                                 TCP(),
+            #                                                 TextProtocol(text='GET /index.html HTTP/1.1\x0aconnection: close\x0aHost: www.google.cn\x0a\x0a',
+            #                                                              eol=Enum.TEXT_PROTOCOL_END_OF_LINE_CRLF),
+            #                                                 HexDump(content='\x124Vx\xad\xef\xdf"E4\xed\xdf\xad#B?\xdf\xdf#'),
+            #                                                 )
 
             is_drone_started_up = False
             while not is_drone_started_up:

@@ -36,10 +36,17 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             tx_port_list.add_port(port_number=tx_port_number)
             drone = Drone(host_name=host_name, tx_port_list=tx_port_list)
             drone.connect()
-            instance.tx_rate = drone.fetch_stats_tx_port().tx_bps * 8
+            tx_stats = drone.fetch_stats_tx_port()
+            instance.tx_rate = tx_stats.tx_bps * 8
+            if tx_stats.state.is_transmit_on:
+                instance.status = 'Transmititing'
+            else:
+                instance.status = 'Idle'
             drone.disconnect()
             log_nsr_service.warning('Drone fetch tx rate successful')
-        except:
+        except Exception, e:
+            log_nsr_service.warning(traceback.format_exc())
+            log_nsr_service.warning(e)
             instance.tx_rate = -1
             log_nsr_service.warning('Drone has not been started up')
 
@@ -74,7 +81,7 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                                       hexdump=HexDump,
                                       userscript=UserScript
         )
-        
+
         # log_nsr_service.warning(protocol_class_name)
         if protocol_class_name.lower() in protocol_class_mapping.keys():
             return protocol_class_mapping[protocol_class_name.lower()]
@@ -97,7 +104,8 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 protocol_configuration[index] = self.configure_protocol(configuration)
             return protocol_configuration
         else:
-            return protocol_configuration
+            if isinstance(protocol_configuration, unicode):
+                return protocol_configuration.encode('utf-8')
 
     def configure_stream_list(self, generator_id, stream_list):
         streams = StreamModel.objects.filter(generator=generator_id)
@@ -105,7 +113,6 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             stream_configuration = json.loads(stream.configuration)
             # for k,v in stream_configuration.items():
             #     log_nsr_service.warning(k + '  ' + str(v))
-            stream_list.add_stream(**stream_configuration)
             protocols = ProtocolModel.objects.filter(stream=stream.id)
             protocol_list = list()
             for protocol in protocols:
@@ -113,7 +120,9 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 protocol_object = self.configure_protocol(protocol_configuration)
                 if protocol_object is not None:
                     protocol_list.append(protocol_object)
-            stream_list.current_stream.configure_protocols(*protocol_list)
+            if len(protocol_list) > 0:
+                stream_list.add_stream(**stream_configuration)
+                stream_list.current_stream.configure_protocols(*protocol_list)
 
 
     def perform_update(self, serializer):
@@ -153,8 +162,8 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             log_nsr_service.warning('Drone setup successful')
         except Exception, e:
             self.perform_error_status = http_response_status.HTTP_304_NOT_MODIFIED
+            log_nsr_service.warning(traceback.format_exc())
             log_nsr_service.warning(e)
-            traceback.print_exc()
             log_nsr_service.warning('Drone has not been started up')
 
     def update(self, request, *args, **kwargs):
