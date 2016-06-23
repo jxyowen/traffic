@@ -106,6 +106,8 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         else:
             if isinstance(protocol_configuration, unicode):
                 return protocol_configuration.encode('utf-8')
+            else:
+                return protocol_configuration
 
     def configure_stream_list(self, generator_id, stream_list):
         streams = StreamModel.objects.filter(generator=generator_id)
