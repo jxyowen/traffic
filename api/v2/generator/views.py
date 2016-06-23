@@ -1,17 +1,21 @@
+# -*- coding:utf-8 -*-
+import json
+import traceback
+
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .serializers import *
-from .permissions import IsOwnerOrReadOnly
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework import status as http_response_status
-from utils.nsr_log import log_nsr_service
 
 from ostinato_light.drone import Drone
 from ostinato_light.port_list import PortList
 from ostinato_light.stream_list import StreamList
-import json
-import traceback
 from ostinato_light.protocols import *
+
+from utils.nsr_log import log_nsr_service
+
+from .serializers import *
+from .permissions import IsOwnerOrReadOnly
 
 
 class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -26,6 +30,14 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     serializer_class = GeneratorSerializer
     permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
+
+    # def get_view_name(self):
+    #     """
+    #     Return the view name, as used in OPTIONS responses and in the
+    #     browsable API.
+    #     """
+    #
+    #     return '流量生成器'
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -82,7 +94,6 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                                       userscript=UserScript
         )
 
-        # log_nsr_service.warning(protocol_class_name)
         if protocol_class_name.lower() in protocol_class_mapping.keys():
             return protocol_class_mapping[protocol_class_name.lower()]
         return None
@@ -179,6 +190,7 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         else:
             return Response(serializer.data)
 
+
 class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     jxyowen
@@ -195,48 +207,13 @@ class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(generator=self.kwargs['parent_lookup_generator_pk'])
 
-    # def list(self, request, parent_lookup_pk=None):
-    #     queryset = self.get_queryset()
-    #     # queryset = self.queryset.filter(generator=self.kwargs['parent_lookup_pk'])
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
-
-    # def retrieve(self, request, pk=None, **kwargs):
-    #     queryset = self.queryset.get(id=pk)
-    #     serializer = self.get_serializer(queryset)
-    #     return Response(serializer.data)
-
-    # def update(self, request, *args, **kwargs):
-    #     partial = kwargs.pop('partial', False)
-    #     queryset = self.queryset.get(id=kwargs['pk'])
-    #     serializer = self.get_serializer(queryset, data=request.data, partial=partial)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_update(serializer)
-    #     return Response(serializer.data)
-
 
 class ProtocolViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = ProtocolModel.objects.all()
     serializer_class = ProtocolSerializer
     permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
-    # lookup_field = 'generator'
 
     def get_queryset(self):
         return self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'],
-                                    # generator=self.kwargs['parent_lookup_generator_pk']
         )
-
-    # def create(self, request, *args, **kwargs):
-    #     kkk = request.data
-    #     assert False
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_create(serializer)
-    #     headers = self.get_success_headers(serializer.data)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    # def list(self, request, parent_lookup_stream_pk=None):
-    #     queryset = self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'])
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
