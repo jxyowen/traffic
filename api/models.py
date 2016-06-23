@@ -17,12 +17,12 @@ class GeneratorModel(models.Model):
     id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
     created = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField()
-    port = models.IntegerField(
+    port_in_use = models.IntegerField(
         default=0
     )
-    tx_rate = models.IntegerField(
-        default=0
-    )
+    # tx_rate = models.IntegerField(
+    #     default=0
+    # )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     mode = models.CharField(max_length=10, choices=MODE_CHOICES, default=u'Normal')
     # owner = models.ForeignKey('auth.User', related_name='generator')

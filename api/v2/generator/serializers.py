@@ -19,8 +19,8 @@ class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
         model = GeneratorModel
         fields = ('ip',
                   'id',
-                  'port',
-                  'tx_rate',
+                  'port_in_use',
+                  # 'tx_rate',
                   'status',
                   'mode',
                   'streams'

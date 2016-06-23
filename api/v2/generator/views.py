@@ -31,56 +31,53 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
-    # def get_view_name(self):
-    #     """
-    #     Return the view name, as used in OPTIONS responses and in the
-    #     browsable API.
-    #     """
-    #
-    #     return '流量生成器'
 
-    def generators_parameters_fetch_from_drone(self, instance):
+    def generator_parameters_fetch_from_drone(self, generator):
         try:
-            tx_port_number = instance.port
-            host_name = instance.ip
+            tx_port_number = generator['port_in_use']
+            host_name = generator['ip']
             tx_port_list = PortList()
             tx_port_list.add_port(port_number=tx_port_number)
             drone = Drone(host_name=host_name, tx_port_list=tx_port_list)
             drone.connect()
             tx_stats = drone.fetch_stats_tx_port()
-            instance.tx_rate = tx_stats.tx_bps * 8
+            generator['tx_rate'] = tx_stats.tx_bps * 8
+            generator['port_available'] = list()
+            for port in drone.get_port_config_list().port:
+                generator['port_available'].append('port %d   name: %s   description: %s' % (port.port_id.id, port.name, port.description))
             if tx_stats.state.is_transmit_on:
-                instance.status = 'Transmititing'
+                generator['status'] = 'Transmititing'
             else:
-                instance.status = 'Idle'
+                generator['status'] = 'Idle'
             drone.disconnect()
             log_nsr_service.warning('Drone fetch tx rate successful')
         except Exception, e:
             log_nsr_service.warning(traceback.format_exc())
             log_nsr_service.warning(e)
-            instance.tx_rate = -1
+            generator['tx_rate'] = -1
             log_nsr_service.warning('Drone has not been started up')
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        for generator in queryset:
-            self.generators_parameters_fetch_from_drone(generator)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
         serializer = self.get_serializer(queryset, many=True)
+        generators = serializer.data
 
-        return Response(serializer.data)
+        for generator in generators:
+            self.generator_parameters_fetch_from_drone(generator)
+
+        return Response(generators)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        self.generators_parameters_fetch_from_drone(instance)
+
         serializer = self.get_serializer(instance)
-
-        return Response(serializer.data)
-
+        generators = serializer.data
+        self.generator_parameters_fetch_from_drone(generators)
+        return Response(generators)
 
     def perform_get_data(self, initial_data, field, default):
         if field in initial_data:
@@ -152,14 +149,13 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                 stream_list.add_stream(**stream_configuration)
                 stream_list.current_stream.configure_protocols(*protocol_list)
 
-
     def perform_update(self, serializer):
         instance = self.get_object()
         initial_data = serializer.initial_data
         generator_id = self.perform_get_data(initial_data=initial_data, field='id', default=instance.id)
         status = self.perform_get_data(initial_data=initial_data, field='status', default=instance.status)
         mode = self.perform_get_data(initial_data=initial_data, field='mode', default=instance.mode)
-        tx_port_number = self.perform_get_data(initial_data=initial_data, field='port', default=instance.port)
+        tx_port_number = self.perform_get_data(initial_data=initial_data, field='port_in_use', default=instance.port_in_use)
         host_name = self.perform_get_data(initial_data=initial_data, field='ip', default=instance.ip)
         self.perform_error_status = None
         try:
@@ -200,10 +196,12 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
+        generators = serializer.data
+        self.generator_parameters_fetch_from_drone(generators)
         if self.perform_error_status:
-            return Response(serializer.data, status=self.perform_error_status)
+            return Response(generators, status=self.perform_error_status)
         else:
-            return Response(serializer.data)
+            return Response(generators)
 
 
 class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
