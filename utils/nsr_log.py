@@ -87,7 +87,8 @@ log_root = nsr_logger(logger_name='')
 
 
 log_nsr_service = nsr_logger(logger_name='service',
-                             log_file_path_list=[r'c:/service.log'],
+                             # log_file_path_list=[r'c:/service.log'],
+                             log_file_path_list=[r'/Users/jixiaoyu/Desktop/github_clone/traffic.log'],
                              log_format=FORMATTER,
                              log_level=LOG_LEVEL)
 #
