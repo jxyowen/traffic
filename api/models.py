@@ -50,7 +50,7 @@ class StreamModel(models.Model):
 
 class ProtocolModel(models.Model):
     stream = models.ForeignKey(StreamModel, null=False)
-    generator = models.ForeignKey(GeneratorModel, null=False)
+    # generator = models.ForeignKey(GeneratorModel, null=False)
     created = models.DateTimeField(auto_now_add=True)
 
     configuration = models.TextField()

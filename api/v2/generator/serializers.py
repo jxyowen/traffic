@@ -10,10 +10,10 @@ from utils.nsr_log import log_nsr_service
 
 class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
 
-    url = MultiplePKsHyperlinkedIdentityField(view_name='generator-detail',
-                                              lookup_fields=['id'],
-                                              lookup_url_kwargs=['pk']
-    )
+    # url = MultiplePKsHyperlinkedIdentityField(view_name='generator-detail',
+    #                                           lookup_fields=['id'],
+    #                                           lookup_url_kwargs=['pk']
+    # )
 
     streams = serializers.HyperlinkedIdentityField(
         view_name='stream-list',
@@ -22,7 +22,8 @@ class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = GeneratorModel
-        fields = ('url',
+        fields = (
+                  # 'url',
                   'ip',
                   'id',
                   'port_in_use',
@@ -34,10 +35,10 @@ class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
 class StreamSerializer(serializers.HyperlinkedModelSerializer):
     # owner = serializers.ReadOnlyField(source='owner.username')
 
-    url = MultiplePKsHyperlinkedIdentityField(view_name='stream-detail',
-                                              lookup_fields=['generator_id', 'id'],
-                                              lookup_url_kwargs=['parent_lookup_generator_pk', 'pk']
-    )
+    # url = MultiplePKsHyperlinkedIdentityField(view_name='stream-detail',
+    #                                           lookup_fields=['generator_id', 'id'],
+    #                                           lookup_url_kwargs=['parent_lookup_generator_pk', 'pk']
+    # )
 
     protocols = MultiplePKsHyperlinkedIdentityField(view_name='protocol-list',
                                                     lookup_fields=['generator_id', 'id'],
@@ -59,7 +60,7 @@ class StreamSerializer(serializers.HyperlinkedModelSerializer):
 
         model = StreamModel
         fields = (
-                  'url',
+                  # 'url',
                   'configuration',
                   # 'generator',
                   'protocols',
@@ -68,10 +69,10 @@ class StreamSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProtocolSerializer(serializers.HyperlinkedModelSerializer):
-    url = MultiplePKsHyperlinkedIdentityField(view_name='protocol-detail',
-                                              lookup_fields=['generator_id', 'stream_id', 'id'],
-                                                    lookup_url_kwargs=['parent_lookup_generator_pk', 'parent_lookup_stream_pk', 'pk']
-    )
+    # url = MultiplePKsHyperlinkedIdentityField(view_name='protocol-detail',
+    #                                           lookup_fields=['generator_id', 'stream_id', 'id'],
+    #                                                 lookup_url_kwargs=['parent_lookup_generator_pk', 'parent_lookup_stream_pk', 'pk']
+    # )
 
 
     # stream = MultiplePKsHyperlinkedRelatedField(
@@ -98,7 +99,7 @@ class ProtocolSerializer(serializers.HyperlinkedModelSerializer):
 
         model = ProtocolModel
         fields = (
-                  'url',
+                  # 'url',
                   'configuration',
                   # 'generator',
                   # 'stream',

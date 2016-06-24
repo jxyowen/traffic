@@ -8,7 +8,7 @@ from rest_framework import status as http_response_status
 
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from api.rest_framework_common_extensions.ModelViewSetExtensions import ModelViewSetUpdateExtension
+from api.rest_framework_common_extensions.ModelViewSetExtensions import ModelViewSetExtension
 
 from utils.nsr_log import log_nsr_service
 from utils.HWS5700SwitchController import HWS5700SwitchController
@@ -31,7 +31,7 @@ class SwtichViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                           IsOwnerOrReadOnly,)
 
 
-class VLANViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetUpdateExtension):
+class VLANViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetExtension):
     """
     jxyowen
     This viewset automatically provides `list`, `create`, `retrieve`,
