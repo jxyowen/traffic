@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
-import os
+import os, traceback
 import pexpect
 
 import logging
@@ -56,14 +57,14 @@ def nsr_logger(logger_name='', is_console_enabled=False, log_file_path_list=[], 
 log_root = nsr_logger(logger_name='')
 
 log_hw_s5700 = nsr_logger(logger_name='hw_s5700',
-                          is_console_enabled=False,
+                          is_console_enabled=True,
                           # log_file_path_list=[r'/var/www/nsr/resource/vswitches/hw_s5700.log'],
                           log_file_path_list=[],
                           log_format=FORMATTER,
                           log_level=LOG_LEVEL)
 
 
-class NSRSSH():
+class NSRSSH(object):
 
     def __init__(self, timeout=30, try_login_max_times=3):
         self._cmd_exec_result = -2
@@ -118,51 +119,6 @@ class NSRSSH():
                 self._cmd_exec_result = 0
                 return self
 
-    # def __init__(self, is_debug_mode=False, timeout=30):
-    #     self.__is_debug_mode = is_debug_mode
-    #     self.cmd_exec_result = 0
-    #     self.__timeout = timeout
-    #     self._child = pexpect.spawn(command='ls', timeout=self.__timeout)
-    #
-    # def connect(self, login_info, logged_in_symbol='', try_login_max_times=3):
-    #     '''
-    #     建立ssh连接
-    #     :param login_info:登录信息，包括目标主机ip,用户名，密码
-    #     :return:ssh连接实例
-    #     '''
-    #
-    #
-    #     ssh_newkey = 'Are you sure you want to continue connecting'
-    #
-    #     is_logged_in = False
-    #     try_login_times = 0
-    #     is_try_login = True
-    #     while not is_logged_in:
-    #         #1.ssh命令登录
-    #         if is_try_login:
-    #             self._child.sendline(r'ssh-keygen -f "/root/.ssh/known_hosts" -R ' + login_info['methip'])
-    #             self._child.sendline('ssh -l ' + login_info['user'] + ' ' + login_info['methip'])
-    #             is_try_login = False
-    #
-    #         i = self._child.expect([pexpect.TIMEOUT, pexpect.EOF, ssh_newkey, 'assword: ', logged_in_symbol])
-    #
-    #         if 0 == i or 1 == i:
-    #             self._print_error()
-    #             if try_login_times < try_login_max_times:
-    #                 try_login_times += 1
-    #                 is_try_login = True
-    #             else:
-    #                 if 0 == i:
-    #                     self.cmd_exec_result = -1
-    #                 elif 1 == i:
-    #                     self.cmd_exec_result = -2
-    #                 return self
-    #         elif 2 == i:  # SSH does not have the public key. Just accept it.
-    #             self._child.sendline('yes')
-    #         elif 3 == i:
-    #             self._child.sendline(login_info['password'])
-    #         elif 4 == i:
-    #             return self
 
     def disconnect(self):
         if self._cmd_exec_result != 0:
@@ -218,3 +174,17 @@ class NSRSSH():
         log_hw_s5700.info(self._child.before)
         log_hw_s5700.info(self._child.after)
         log_hw_s5700.info('########DEBUG INFO END########')
+
+if __name__ == '__main__':
+    print(132)
+    d = NSRSSH()
+    try:
+        log_hw_s5700.info(132123123123)
+        d.connect(login_info=dict(user='abc',methip='192.168.1.1',password='1233321'),logged_in_symbol='aa')
+    except Exception, e:
+
+        log_hw_s5700.info(traceback.format_exc())
+        log_hw_s5700.info(e)
+        log_hw_s5700.info('error errorerrorerrorerrorerrorerror')
+
+

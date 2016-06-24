@@ -4,8 +4,11 @@ import traceback
 
 from rest_framework.response import Response
 from rest_framework import viewsets
-from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework import status as http_response_status
+
+from rest_framework_extensions.mixins import NestedViewSetMixin
+
+from api.rest_framework_common_extensions.ModelViewSetExtensions import ModelViewSetUpdateExtension
 
 from ostinato_light.drone import Drone
 from ostinato_light.port_list import PortList
@@ -18,7 +21,7 @@ from .serializers import *
 from .permissions import IsOwnerOrReadOnly
 
 
-class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetUpdateExtension):
     """
     jxyowen
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -50,6 +53,11 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             else:
                 generator['status'] = 'Idle'
             drone.disconnect()
+
+            generator_object = GeneratorModel.objects.get(id=generator['id'])
+            generator_object.status = generator['status']
+            generator_object.save()
+
             log_nsr_service.warning('Drone fetch tx rate successful')
         except Exception, e:
             log_nsr_service.warning(traceback.format_exc())
@@ -78,12 +86,6 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
         generators = serializer.data
         self.generator_parameters_fetch_from_drone(generators)
         return Response(generators)
-
-    def perform_get_data(self, initial_data, field, default):
-        if field in initial_data:
-            return initial_data[field]
-        else:
-            return default
 
     def get_protocol_class(self, protocol_class_name):
         protocol_class_mapping = dict(mac=MAC,
@@ -152,11 +154,11 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def perform_update(self, serializer):
         instance = self.get_object()
         initial_data = serializer.initial_data
-        generator_id = self.perform_get_data(initial_data=initial_data, field='id', default=instance.id)
-        status = self.perform_get_data(initial_data=initial_data, field='status', default=instance.status)
-        mode = self.perform_get_data(initial_data=initial_data, field='mode', default=instance.mode)
-        tx_port_number = self.perform_get_data(initial_data=initial_data, field='port_in_use', default=instance.port_in_use)
-        host_name = self.perform_get_data(initial_data=initial_data, field='ip', default=instance.ip)
+        generator_id = self.perform_get_data(initial_data=initial_data, field='id', model_instance=instance)
+        status = self.perform_get_data(initial_data=initial_data, field='status', model_instance=instance)
+        mode = self.perform_get_data(initial_data=initial_data, field='mode', model_instance=instance)
+        tx_port_number = self.perform_get_data(initial_data=initial_data, field='port_in_use', model_instance=instance)
+        host_name = self.perform_get_data(initial_data=initial_data, field='ip', model_instance=instance)
         self.perform_error_status = None
         try:
             if 'status' in initial_data.keys():
@@ -204,7 +206,7 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
             return Response(generators)
 
 
-class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetUpdateExtension):
     """
     jxyowen
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -220,8 +222,21 @@ class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     def get_queryset(self):
         return self.queryset.filter(generator=self.kwargs['parent_lookup_generator_pk'])
 
+    # def perform_update(self, serializer):
+    #     instance = self.get_object()
+    #     initial_data = serializer.initial_data
+    #     self.perform_error_status = None
+    #     try:
+    #         self.find_key_and_value_changed('switch', initial_data, instance)
+    #         serializer.save()
+    #         log_nsr_service.warning('Setup successful')
+    #     except Exception, e:
+    #         self.perform_error_status = http_response_status.HTTP_304_NOT_MODIFIED
+    #         log_nsr_service.warning(traceback.format_exc())
+    #         log_nsr_service.warning(e)
+    #         log_nsr_service.warning('Setup failed')
 
-class ProtocolViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class ProtocolViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetUpdateExtension):
     queryset = ProtocolModel.objects.all()
     serializer_class = ProtocolSerializer
     permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
@@ -229,4 +244,17 @@ class ProtocolViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'],
+                                    generator=self.kwargs['parent_lookup_generator_pk']
         )
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        # stream=StreamModel.objects.get(id=1),generator=GeneratorModel.objects.get(id=1)
+        serializer.is_valid(raise_exception=True)
+        # self.perform_create(serializer)
+        match = re.search(r'generators/(?P<parent_lookup_generator_pk>[^/.]+)/streams/(?P<parent_lookup_stream_pk>[^/.]+)/protocols/', request.path)
+        serializer.save(stream=StreamModel.objects.get(id=match.group('parent_lookup_stream_pk')),
+                        generator=GeneratorModel.objects.get(id=match.group('parent_lookup_generator_pk')))
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=http_response_status.HTTP_201_CREATED, headers=headers)
+

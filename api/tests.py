@@ -33,7 +33,7 @@ from .urls import *
 
 class TestGeneratorSerializer(unittest.TestCase):
     def setUp(self):
-        self.svs = GeneratorSerializer()
+        self.svs = ProtocolSerializer()
     def tearDown(self):
         pass
 
@@ -49,7 +49,7 @@ class TestGeneratorSerializer(unittest.TestCase):
                     print_urls(url)
             else:
                 print(urls)
-        print_urls(urlpatterns)
+        # print_urls(urlpatterns)
 
 if __name__ == '__main__':
     unittest.main()

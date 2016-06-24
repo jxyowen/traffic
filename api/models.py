@@ -5,16 +5,16 @@ from django.contrib import admin
 
 class GeneratorModel(models.Model):
     STATUS_CHOICES = (
-        (u'Transmititing', u'Transmititing'),
         (u'Idle', u'Idle'),
+        (u'Transmititing', u'Transmititing'),
     )
 
     MODE_CHOICES = (
-        (u'Loop', u'Loop'),
         (u'Normal', u'Normal'),
+        (u'Loop', u'Loop'),
     )
 
-    id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
+    id = models.PositiveIntegerField(primary_key=True, verbose_name="ID")
     created = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField()
     port_in_use = models.IntegerField(
@@ -36,7 +36,6 @@ admin.site.register(GeneratorModel)
 
 
 class StreamModel(models.Model):
-    id = models.AutoField(max_length=10, primary_key=True, verbose_name="ID")
     generator = models.ForeignKey(GeneratorModel, null=False)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -50,9 +49,8 @@ class StreamModel(models.Model):
 
 
 class ProtocolModel(models.Model):
-    id = models.AutoField(max_length=10, primary_key=True, verbose_name="ID")
     stream = models.ForeignKey(StreamModel, null=False)
-    # generator = models.ForeignKey(GeneratorModel, null=True)
+    generator = models.ForeignKey(GeneratorModel, null=False)
     created = models.DateTimeField(auto_now_add=True)
 
     configuration = models.TextField()
@@ -65,7 +63,7 @@ class ProtocolModel(models.Model):
 
 
 class SwitchModel(models.Model):
-    id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
+    id = models.PositiveIntegerField(primary_key=True, verbose_name="ID")
     created = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField(default='127.0.0.1')
     name = models.CharField(max_length=50, default='switch')
@@ -86,13 +84,25 @@ class VLANModel(models.Model):
         (u'Hybrid', u'Hybrid'),
     )
 
-    id = models.CharField(max_length=10, primary_key=True, verbose_name="ID")
+    STATUS_CHOICES = (
+        (u'Idle', u'Idle'),
+        (u'Used', u'Used')
+    )
+
+    TRAFFIC_CHOICES = (
+        (u'Off', u'Off'),
+        (u'On', u'On'),
+    )
+
+    vlan_id = models.PositiveIntegerField(null=False)
     switch = models.ForeignKey(SwitchModel, null=False)
     created = models.DateTimeField(auto_now_add=True)
     mode = models.CharField(max_length=10, choices=MODE_CHOICES)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+    traffic = models.CharField(max_length=10, choices=TRAFFIC_CHOICES)
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('vlan_id',)
 
     def __unicode__(self):
         return 'id: %s  mode: %s ' % (self.id, self.mode)

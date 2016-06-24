@@ -3,10 +3,15 @@ __author__ = 'jxy'
 
 from rest_framework import serializers
 from api.models import *
-from api.rest_framework_common_extensions.MultiplePKsHyperlinked import *
+from api.rest_framework_common_extensions.HyperlinkedExtensions import *
 
 
 class SwitchSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = MultiplePKsHyperlinkedIdentityField(view_name='switch-detail',
+                                              lookup_fields=['id'],
+                                              lookup_url_kwargs=['pk']
+    )
 
     vlans = serializers.HyperlinkedIdentityField(
         view_name='vlan-list',
@@ -15,7 +20,9 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = SwitchModel
-        fields = ('id',
+        fields = (
+                  'url',
+                  'id',
                   'name',
                   'ip',
                   'user',
@@ -26,10 +33,10 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
 
 class VLANSerializer(serializers.HyperlinkedModelSerializer):
 
-    # protocols = MultiplePKsHyperlinkedIdentityField(view_name='protocol-list',
-    #                                                 lookup_fields=['generator_id', 'id'],
-    #                                                 lookup_url_kwargs=['parent_lookup_generator_pk', 'parent_lookup_stream_pk']
-    # )
+    url = MultiplePKsHyperlinkedIdentityField(view_name='vlan-detail',
+                                              lookup_fields=['switch_id', 'id'],
+                                              lookup_url_kwargs=['parent_lookup_switch_pk', 'pk']
+    )
 
     switch = MultiplePKsHyperlinkedRelatedField(allow_null=True,
                                                  queryset=SwitchModel.objects.all(),
@@ -46,8 +53,11 @@ class VLANSerializer(serializers.HyperlinkedModelSerializer):
 
         model = VLANModel
         fields = (
+                  'url',
+                  'vlan_id',
                   'switch',
-                  # 'protocols',
                   'id',
-                  'mode'
+                  'mode',
+                  'status',
+                  'traffic'
                   )

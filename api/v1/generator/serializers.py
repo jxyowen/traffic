@@ -7,7 +7,7 @@ from rest_framework import serializers
 
 from api.models import *
 
-from api.rest_framework_common_extensions.MultiplePKsHyperlinked import *
+from api.rest_framework_common_extensions.HyperlinkedExtensions import *
 
 
 class GeneratorSerializer(serializers.HyperlinkedModelSerializer):

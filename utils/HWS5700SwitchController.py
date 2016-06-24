@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# -*- coding:utf-8 -*-
 import sys
 import re
 import os
@@ -12,7 +12,7 @@ except Exception:
 
 
 
-class SwitchHandleHWS5700(NSRSSH):
+class HWS5700SwitchController(NSRSSH):
     # def __init__(self, login_info, logged_in_symbol='<Quidway>', is_debug_mode=False,
     #              timeout=30, try_login_max_times=3, acl_number_shift=1000):
     #     super().__init__(login_info=login_info, logged_in_symbol=logged_in_symbol, is_debug_mode=is_debug_mode,
@@ -20,7 +20,7 @@ class SwitchHandleHWS5700(NSRSSH):
     #     self.__acl_number_shift = acl_number_shift
 
     def __init__(self, timeout=30, acl_number_shift=1000):
-        super().__init__(timeout=timeout)
+        super(self.__class__, self).__init__(timeout=timeout)
         self.__acl_number_shift = acl_number_shift
 
     def get_vlan_list(self):
@@ -465,7 +465,7 @@ if __name__ == "__main__":
 
     # switch_login_info = {'methip':'172.19.40.200','user':'nsr','password':'nsr12345'}
     # vlan_id_list = [333,444,555]
-    hw_s5700 = SwitchHandleHWS5700().connect(login_info=switch_login_info, logged_in_symbol='<Quidway>').enter_system_view()
+    hw_s5700 = HWS5700SwitchController().connect(login_info=switch_login_info, logged_in_symbol='<Quidway>').enter_system_view()
     # hw_s5700.vlan_create_batch(vlan_id_list)
 
     vlan_id = sys.argv[2]
