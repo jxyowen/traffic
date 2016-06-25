@@ -20,7 +20,7 @@ class NSRSSH(object):
     def get_cmd_exec_result(self):
         return self._cmd_exec_result
 
-    def connect(self, login_info, logged_in_symbol=''):
+    def connect(self, user, password, ip, logged_in_symbol=''):
         '''
         建立ssh连接
         :param login_info:登录信息，包括目标主机ip,用户名，密码
@@ -37,8 +37,8 @@ class NSRSSH(object):
             #1.ssh命令登录
             if is_try_login:
                 try_login_times += 1
-                os.system('sudo ssh-keygen -f "/root/.ssh/known_hosts" -R ' + login_info['methip'])
-                self._child = pexpect.spawn('ssh -l ' + login_info['user'] + ' ' + login_info['methip'],
+                os.system('sudo ssh-keygen -f "/root/.ssh/known_hosts" -R ' + ip)
+                self._child = pexpect.spawn('ssh -l ' + user + ' ' + ip,
                                       timeout=self.__timeout)
                 is_try_login = False
 
@@ -58,7 +58,7 @@ class NSRSSH(object):
             elif 2 == i:  # SSH does not have the public key. Just accept it.
                 self._child.sendline('yes')
             elif 3 == i:
-                self._child.sendline(login_info['password'])
+                self._child.sendline(password)
             elif 4 == i:
                 self._print_debug_info()
                 self._cmd_exec_result = 0
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     d = NSRSSH()
     try:
         log_hw_s5700.info(132123123123)
-        d.connect(login_info=dict(user='abc',methip='192.168.1.1',password='1233321'),logged_in_symbol='aa')
+        d.connect(user='abc',ip='192.168.1.1',password='1233321',logged_in_symbol='aa')
     except Exception, e:
 
         log_hw_s5700.info(traceback.format_exc())

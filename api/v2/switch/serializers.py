@@ -27,6 +27,8 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
                   'ip',
                   'user',
                   'password',
+                  'type',
+                  'logged_in_symbol',
                   'vlans',
         )
 

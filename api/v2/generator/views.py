@@ -179,6 +179,7 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
     def update_response_data_process(self, data, request, *args, **kwargs):
         self.generator_parameters_fetch_from_drone(data)
 
+
 class StreamViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     """
     jxyowen

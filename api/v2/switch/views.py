@@ -61,9 +61,12 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
 
             if self.find_key_and_value_changed('status', initial_data, instance):
                 switch = instance.switch
-                switch_info = dict()
                 hw_s5700 = HWS5700SwitchController()
-                hw_s5700.connect(login_info=switch, logged_in_symbol='<Quidway>').enter_system_view()
+                hw_s5700.connect(user=switch.user,
+                                 password=switch.password,
+                                 ip=switch.ip,
+                                 logged_in_symbol=switch.type)
+                hw_s5700.enter_system_view()
 
 
             if self.find_key_and_value_changed('mode', initial_data, instance):
