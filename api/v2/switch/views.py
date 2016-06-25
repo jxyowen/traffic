@@ -70,8 +70,8 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
             if self.find_key_and_value_changed('status', initial_data, instance):
                 switch = instance.switch
 
-                
-                switch_controller = HWS5700SwitchController()
+
+                switch_controller = SwitchEnum.CLASS_MAPPING[switch.type]()
                 switch_controller.connect(user=switch.user,
                                  password=switch.password,
                                  ip=switch.ip,

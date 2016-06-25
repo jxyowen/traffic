@@ -1,3 +1,5 @@
+from utils.HWS5700SwitchController import HWS5700SwitchController
+from utils.HWS5700SwitchController import HWS5700SwitchController
 
 class GeneratorEnum():
     STATUS_IDLE = 'idle'
@@ -11,6 +13,9 @@ class GeneratorEnum():
 class SwitchEnum():
     TYPE_HUAWEI = 'huawei'
     TYPE_H3C = 'h3c'
+
+    CLASS_MAPPING = {TYPE_HUAWEI: HWS5700SwitchController,
+                     TYPE_H3C: HWS5700SwitchController}
 
 
 class VLANEnum():

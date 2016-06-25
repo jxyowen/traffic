@@ -30,16 +30,16 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
                   'logged_in_symbol',
                   'vlans',
         )
-        read_only_fields = (
-                          'id',
-                          'name',
-                          'ip',
-                          'user',
-                          'password',
-                          'type',
-                          'logged_in_symbol',
-                          'vlans',
-        )
+        # read_only_fields = (
+        #                   'id',
+        #                   'name',
+        #                   'ip',
+        #                   'user',
+        #                   'password',
+        #                   'type',
+        #                   'logged_in_symbol',
+        #                   'vlans',
+        # )
 
 
 
