@@ -1,67 +1,12 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import os, traceback
+import os
 import pexpect
+import traceback
 
-import logging
-import logging.handlers
+from utils.nsr_log import log_hw_s5700
 
-LOG_LEVEL = logging.INFO
-FORMATTER = '%(asctime)s %(message)s'
-
-MAIN_LOG_PATH = r'c:/nsr.log'
-
-def nsr_logger(logger_name='', is_console_enabled=False, log_file_path_list=[], log_format=FORMATTER, log_level=logging.DEBUG):
-    '''
-    日志配置器
-    :param logger_name:日志名称
-    :param log_file_path_list:日志文件保存路径
-    :param log_format:日志格式
-    :param log_level:日志等级
-    :return:logger对象
-    '''
-
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(log_level)
-
-    formatter = logging.Formatter(log_format)
-
-    if is_console_enabled:
-        console = logging.StreamHandler()
-        console.setFormatter(formatter)
-        logger.addHandler(console)
-
-    for log_file in log_file_path_list:
-        # filehandler = logging.FileHandler(log_file)
-        # filehandler.setFormatter(formatter)
-        # logger.addHandler(filehandler)
-
-        '''
-        “S”: Seconds
-        “M”: Minutes
-        “H”: Hours
-        “D”: Dayszc11
-        “W”: Week day (0=Monday)
-        “midnight”: Roll over at midnight
-        '''
-        filehandler = logging.handlers.TimedRotatingFileHandler(
-        log_file, 'D', 1, 0)
-        # 设置后缀名称，跟strftime的格式一样
-        filehandler.suffix = "%Y%m%d-%H%M%S.log"
-        filehandler.setFormatter(formatter)
-        logger.addHandler(filehandler)
-
-    return logger
-
-log_root = nsr_logger(logger_name='')
-
-log_hw_s5700 = nsr_logger(logger_name='hw_s5700',
-                          is_console_enabled=True,
-                          # log_file_path_list=[r'/var/www/nsr/resource/vswitches/hw_s5700.log'],
-                          log_file_path_list=[],
-                          log_format=FORMATTER,
-                          log_level=LOG_LEVEL)
 
 
 class NSRSSH(object):

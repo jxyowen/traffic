@@ -48,16 +48,30 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
         return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
 
     def perform_update(self, serializer):
+        self.perform_error_status = None
         instance = self.get_object()
         initial_data = serializer.initial_data
-        switch = self.perform_get_data(initial_data=initial_data, field='switch', model_instance=instance)
+        vlan_id = self.perform_get_data(initial_data=initial_data, field='vlan_id', model_instance=instance)
         status = self.perform_get_data(initial_data=initial_data, field='status', model_instance=instance)
         mode = self.perform_get_data(initial_data=initial_data, field='mode', model_instance=instance)
         traffic = self.perform_get_data(initial_data=initial_data, field='traffic', model_instance=instance)
-        self.perform_error_status = None
         try:
+            if self.find_key_and_value_changed('vlan_id', initial_data, instance):
+                raise Exception('vlan_id cannot be modified!')
 
-            self.find_key_and_value_changed('switch', initial_data, instance)
+            if self.find_key_and_value_changed('status', initial_data, instance):
+                switch = instance.switch
+                switch_info = dict()
+                hw_s5700 = HWS5700SwitchController()
+                hw_s5700.connect(login_info=switch, logged_in_symbol='<Quidway>').enter_system_view()
+
+
+            if self.find_key_and_value_changed('mode', initial_data, instance):
+                pass
+
+            if self.find_key_and_value_changed('traffic', initial_data, instance):
+                pass
+
             serializer.save()
             log_nsr_service.warning('Setup successful')
         except Exception, e:
