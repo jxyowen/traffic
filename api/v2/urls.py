@@ -21,7 +21,7 @@ nested_router.register(r'generators',
 
 
 nested_router.register(r'switches',
-                       switch_views.SwtichViewSet,
+                       switch_views.SwitchViewSet,
                        base_name='switch')\
              .register(r'vlans',
                        switch_views.VLANViewSet,

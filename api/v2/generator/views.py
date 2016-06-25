@@ -21,7 +21,7 @@ from .serializers import *
 from .permissions import IsOwnerOrReadOnly
 
 
-class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetExtension):
+class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     """
     jxyowen
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -65,29 +65,11 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetEx
             generator['status'] = 'Error'
             log_nsr_service.warning('Drone has not been started up')
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(queryset, many=True)
-        datas = serializer.data
-
-        for data in datas:
-            self.generator_parameters_fetch_from_drone(data)
-            self.add_url(data, request, data['id'])
-
-        return Response(datas)
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-
-        serializer = self.get_serializer(instance)
-        data = serializer.data
+    def list_response_data_process(self, data, request, *args, **kwargs):
         self.generator_parameters_fetch_from_drone(data)
-        # self.add_url(data, request)
-        return Response(data)
+
+    def retrieve_response_data_process(self, data, request, *args, **kwargs):
+        self.generator_parameters_fetch_from_drone(data)
 
     def get_protocol_class(self, protocol_class_name):
         protocol_class_mapping = dict(mac=MAC,
@@ -194,19 +176,8 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetEx
             log_nsr_service.warning(e)
             log_nsr_service.warning('Drone has not been started up')
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        generators = serializer.data
-        self.generator_parameters_fetch_from_drone(generators)
-        if self.perform_error_status:
-            return Response(generators, status=self.perform_error_status)
-        else:
-            return Response(generators)
-
+    def update_response_data_process(self, data, request, *args, **kwargs):
+        self.generator_parameters_fetch_from_drone(data)
 
 class StreamViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     """
@@ -224,6 +195,10 @@ class StreamViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     def get_queryset(self):
         return self.queryset.filter(generator=self.kwargs['parent_lookup_generator_pk'])
 
+    def foreign_key_information(self):
+        foreign_key_information = dict(model=GeneratorModel, field_name='generator', list_name='generators')
+        return foreign_key_information
+
 
 class ProtocolViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = ProtocolModel.objects.all()
@@ -233,19 +208,9 @@ class ProtocolViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelV
 
     def get_queryset(self):
         return self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'],
-                                    generator=self.kwargs['parent_lookup_generator_pk']
+                                    # generator=self.kwargs['parent_lookup_generator_pk']
         )
 
-    def create(self, request, *args, **kwargs):
-        http_status = http_response_status.HTTP_201_CREATED
-        serializer = self.get_serializer(data=request.data)
-        # stream=StreamModel.objects.get(id=1),generator=GeneratorModel.objects.get(id=1)
-        serializer.is_valid(raise_exception=True)
-        # self.perform_create(serializer)
-        match = re.search(r'generators/(?P<parent_lookup_generator_pk>[^/.]+)/streams/(?P<parent_lookup_stream_pk>[^/.]+)/protocols/', request.path)
-        serializer.save(stream=StreamModel.objects.get(id=match.group('parent_lookup_stream_pk')),
-                        generator=GeneratorModel.objects.get(id=match.group('parent_lookup_generator_pk')))
-
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=http_status, headers=headers)
-
+    def foreign_key_information(self):
+        foreign_key_information = dict(model=StreamModel, field_name='stream', list_name='streams')
+        return foreign_key_information

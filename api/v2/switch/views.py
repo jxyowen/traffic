@@ -17,7 +17,7 @@ from .serializers import *
 from .permissions import IsOwnerOrReadOnly
 
 
-class SwtichViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     """
     jxyowen
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -31,7 +31,7 @@ class SwtichViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
                           IsOwnerOrReadOnly,)
 
 
-class VLANViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetExtension):
+class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     """
     jxyowen
     This viewset automatically provides `list`, `create`, `retrieve`,
@@ -66,15 +66,6 @@ class VLANViewSet(NestedViewSetMixin, viewsets.ModelViewSet, ModelViewSetExtensi
             log_nsr_service.warning(e)
             log_nsr_service.warning('Setup failed')
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        generators = serializer.data
-        if self.perform_error_status:
-            return Response(generators, status=self.perform_error_status)
-        else:
-            return Response(generators)
-
+    def foreign_key_information(self):
+        foreign_key_information = dict(model=SwitchModel, field_name='switch', list_name='switches')
+        return foreign_key_information
