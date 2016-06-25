@@ -23,13 +23,21 @@ class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = GeneratorModel
         fields = (
-                  # 'url',
                   'ip',
                   'id',
                   'port_in_use',
                   'status',
                   'mode',
                   'streams'
+        )
+
+        read_only_fields = (
+                          'ip',
+                          'id',
+                          'port_in_use',
+                          # 'status',
+                          # 'mode',
+                          'streams'
         )
 
 class StreamSerializer(serializers.HyperlinkedModelSerializer):

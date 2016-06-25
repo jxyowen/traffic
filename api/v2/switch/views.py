@@ -30,6 +30,14 @@ class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
+    # def list_response_data_process(self, data, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #
+    #
+    # def retrieve_response_data_process(self, data, request, *args, **kwargs):
+    #     instance = self.get_object()
+
+
 
 class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     """
@@ -61,12 +69,14 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
 
             if self.find_key_and_value_changed('status', initial_data, instance):
                 switch = instance.switch
-                hw_s5700 = HWS5700SwitchController()
-                hw_s5700.connect(user=switch.user,
+
+                
+                switch_controller = HWS5700SwitchController()
+                switch_controller.connect(user=switch.user,
                                  password=switch.password,
                                  ip=switch.ip,
                                  logged_in_symbol=switch.type)
-                hw_s5700.enter_system_view()
+                switch_controller.enter_system_view()
 
 
             if self.find_key_and_value_changed('mode', initial_data, instance):

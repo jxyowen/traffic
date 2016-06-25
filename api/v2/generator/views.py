@@ -9,6 +9,7 @@ from rest_framework import status as http_response_status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from api.rest_framework_common_extensions.ModelViewSetExtensions import ModelViewSetExtension
+from api.const import *
 
 from ostinato_light.drone import Drone
 from ostinato_light.port_list import PortList
@@ -49,9 +50,9 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
             for port in drone.get_port_config_list().port:
                 generator['port_available'].append('port %d   name: %s   description: %s' % (port.port_id.id, port.name, port.description))
             if tx_stats.state.is_transmit_on:
-                generator['status'] = 'Transmititing'
+                generator['status'] = GeneratorEnum.STATUS_TRANSMITITING
             else:
-                generator['status'] = 'Idle'
+                generator['status'] = GeneratorEnum.STATUS_IDLE
             drone.disconnect()
 
             generator_object = GeneratorModel.objects.get(id=generator['id'])
@@ -62,14 +63,9 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
         except Exception, e:
             log_nsr_service.warning(traceback.format_exc())
             log_nsr_service.warning(e)
-            generator['status'] = 'Error'
+            generator['status'] = GeneratorEnum.STATUS_ERROR
             log_nsr_service.warning('Drone has not been started up')
 
-    def list_response_data_process(self, data, request, *args, **kwargs):
-        self.generator_parameters_fetch_from_drone(data)
-
-    def retrieve_response_data_process(self, data, request, *args, **kwargs):
-        self.generator_parameters_fetch_from_drone(data)
 
     def get_protocol_class(self, protocol_class_name):
         protocol_class_mapping = dict(mac=MAC,
@@ -152,11 +148,11 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
                 drone = Drone(host_name=host_name, tx_port_list=tx_port_list)
                 drone.connect()
 
-                if status == 'Transmititing':
+                if status == GeneratorEnum.STATUS_TRANSMITITING:
                     drone.stop_transmit()
                     current_stream_id_list = drone.fetch_stream_id_list()
                     drone.remove_stream_list(current_stream_id_list)
-                    if mode == 'Loop':
+                    if mode == GeneratorEnum.MODE_LOOP:
                         is_loop_mode = True
                     else:
                         is_loop_mode = False
@@ -177,6 +173,12 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
             log_nsr_service.warning('Drone has not been started up')
 
     def update_response_data_process(self, data, request, *args, **kwargs):
+        self.generator_parameters_fetch_from_drone(data)
+
+    def list_response_data_process(self, data, request, *args, **kwargs):
+        self.generator_parameters_fetch_from_drone(data)
+
+    def retrieve_response_data_process(self, data, request, *args, **kwargs):
         self.generator_parameters_fetch_from_drone(data)
 
 

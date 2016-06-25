@@ -21,7 +21,6 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SwitchModel
         fields = (
-                  # 'url',
                   'id',
                   'name',
                   'ip',
@@ -31,6 +30,17 @@ class SwitchSerializer(serializers.HyperlinkedModelSerializer):
                   'logged_in_symbol',
                   'vlans',
         )
+        read_only_fields = (
+                          'id',
+                          'name',
+                          'ip',
+                          'user',
+                          'password',
+                          'type',
+                          'logged_in_symbol',
+                          'vlans',
+        )
+
 
 
 class VLANSerializer(serializers.HyperlinkedModelSerializer):
@@ -55,7 +65,6 @@ class VLANSerializer(serializers.HyperlinkedModelSerializer):
 
         model = VLANModel
         fields = (
-                  # 'url',
                   'vlan_id',
                   # 'switch',
                   'id',

@@ -1,17 +1,19 @@
 from django.db import models
 from django.contrib import admin
+
+from .const import *
 # Create your models here.
 
 
 class GeneratorModel(models.Model):
     STATUS_CHOICES = (
-        (u'Idle', u'Idle'),
-        (u'Transmititing', u'Transmititing'),
+        (GeneratorEnum.STATUS_IDLE, GeneratorEnum.STATUS_IDLE),
+        (GeneratorEnum.STATUS_TRANSMITITING, GeneratorEnum.STATUS_TRANSMITITING),
     )
 
     MODE_CHOICES = (
-        (u'Normal', u'Normal'),
-        (u'Loop', u'Loop'),
+        (GeneratorEnum.MODE_NORMAL, GeneratorEnum.MODE_NORMAL),
+        (GeneratorEnum.MODE_LOOP, GeneratorEnum.MODE_LOOP),
     )
 
     id = models.PositiveIntegerField(primary_key=True, verbose_name="ID")
@@ -24,7 +26,7 @@ class GeneratorModel(models.Model):
     #     default=0
     # )
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
-    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default=u'Normal')
+    mode = models.CharField(max_length=10, choices=MODE_CHOICES, default=GeneratorEnum.MODE_NORMAL)
     # owner = models.ForeignKey('auth.User', related_name='generator')
 
     class Meta:
@@ -32,7 +34,6 @@ class GeneratorModel(models.Model):
 
     def __unicode__(self):
         return 'id: %s  ip: %s ' % (self.id, self.ip)
-admin.site.register(GeneratorModel)
 
 
 class StreamModel(models.Model):
@@ -64,8 +65,8 @@ class ProtocolModel(models.Model):
 
 class SwitchModel(models.Model):
     TYPE_CHOICES = (
-        (u'Huawei', u'Huawei'),
-        (u'H3C', u'H3C'),
+        (SwitchEnum.TYPE_HUAWEI, SwitchEnum.TYPE_HUAWEI),
+        (SwitchEnum.TYPE_H3C, SwitchEnum.TYPE_H3C),
     )
 
     id = models.PositiveIntegerField(primary_key=True, verbose_name="ID")
@@ -85,20 +86,20 @@ class SwitchModel(models.Model):
 
 class VLANModel(models.Model):
     MODE_CHOICES = (
-        (u'None', u'None'),
-        (u'Access', u'Access'),
-        (u'Trunk', u'Trunk'),
-        (u'Hybrid', u'Hybrid'),
+        (VLANEnum.MODE_NONE, VLANEnum.MODE_NONE),
+        (VLANEnum.MODE_ACCESS, VLANEnum.MODE_ACCESS),
+        (VLANEnum.MODE_TRUNK, VLANEnum.MODE_TRUNK),
+        (VLANEnum.MODE_HYBRID, VLANEnum.MODE_HYBRID),
     )
 
     STATUS_CHOICES = (
-        (u'Idle', u'Idle'),
-        (u'Used', u'Used')
+        (VLANEnum.STATUS_IDLE, VLANEnum.STATUS_IDLE),
+        (VLANEnum.STATUS_USED, VLANEnum.STATUS_USED)
     )
 
     TRAFFIC_CHOICES = (
-        (u'Off', u'Off'),
-        (u'On', u'On'),
+        (VLANEnum.TRAFFIC_OFF, VLANEnum.TRAFFIC_OFF),
+        (VLANEnum.TRAFFIC_ON, VLANEnum.TRAFFIC_ON),
     )
 
     vlan_id = models.PositiveIntegerField(null=False)
@@ -113,3 +114,7 @@ class VLANModel(models.Model):
 
     def __unicode__(self):
         return 'id: %s  mode: %s ' % (self.id, self.mode)
+
+
+admin.site.register(GeneratorModel)
+admin.site.register(SwitchModel)
