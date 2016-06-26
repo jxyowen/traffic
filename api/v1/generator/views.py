@@ -2,7 +2,6 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from api import models
 from .serializers import *
-from .permissions import IsOwnerOrReadOnly
 from rest_framework_extensions.mixins import NestedViewSetMixin
 from rest_framework import status
 
@@ -18,8 +17,6 @@ class GeneratorViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     queryset = GeneratorModel.objects.all()
     serializer_class = GeneratorSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
 
 
 class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
@@ -32,8 +29,6 @@ class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     """
     queryset = StreamModel.objects.all()
     serializer_class = StreamSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         return self.queryset.filter(generator=self.kwargs['parent_lookup_generator_pk'])
@@ -66,9 +61,7 @@ class StreamViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
 class ProtocolViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = ProtocolModel.objects.all()
     serializer_class = ProtocolSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
-    # lookup_field = 'generator'
+
 
     def get_queryset(self):
         return self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'],

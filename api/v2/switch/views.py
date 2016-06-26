@@ -26,7 +26,7 @@ class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     """
     queryset = SwitchModel.objects.all()
     serializer_class = SwitchSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 
