@@ -93,11 +93,13 @@ class NSRSSH(object):
                 if 0 == i:
                     self._print_error()
                     self._cmd_exec_result = -1
-                    break
+                    raise Exception(self._child.before, self._child.after)
+                    # break
                 elif 1 == i:
                     self._print_error()
                     self._cmd_exec_result = -2
-                    break
+                    raise Exception(self._child.before, self._child.after)
+                    # break
                 elif 2 == i:
                     log_hw_s5700.info('command < %s > exec successful' % each_pair[0])
             log_hw_s5700.info('exec command sequence cmd exec result = %d' % self._cmd_exec_result)

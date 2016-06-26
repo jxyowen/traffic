@@ -54,7 +54,7 @@ class ProtocolModel(models.Model):
     # generator = models.ForeignKey(GeneratorModel, null=False)
     created = models.DateTimeField(auto_now_add=True)
 
-    configuration = models.TextField()
+    configuration = models.TextField(null=False)
 
     class Meta:
         ordering = ('id',)

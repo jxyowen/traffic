@@ -113,3 +113,8 @@ class ProtocolSerializer(serializers.HyperlinkedModelSerializer):
                   # 'stream',
                   'id'
                   )
+
+        read_only_fields = (
+                          'configuration',
+                          'id'
+        )
