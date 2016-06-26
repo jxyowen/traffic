@@ -2,8 +2,8 @@
 import json
 import traceback
 
-from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework import permissions
 from rest_framework import status as http_response_status
 
 from rest_framework_extensions.mixins import NestedViewSetMixin
@@ -19,7 +19,6 @@ from ostinato_light.protocols import *
 from utils.nsr_log import log_nsr_service
 
 from .serializers import *
-from .permissions import IsOwnerOrReadOnly
 
 
 class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
@@ -32,8 +31,7 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
     """
     queryset = GeneratorModel.objects.all()
     serializer_class = GeneratorSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly)
 
 
     def generator_parameters_fetch_from_drone(self, generator):
@@ -192,8 +190,6 @@ class StreamViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     """
     queryset = StreamModel.objects.all()
     serializer_class = StreamSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         return self.queryset.filter(generator=self.kwargs['parent_lookup_generator_pk'])
@@ -206,8 +202,6 @@ class StreamViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
 class ProtocolViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = ProtocolModel.objects.all()
     serializer_class = ProtocolSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         return self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'],

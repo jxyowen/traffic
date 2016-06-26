@@ -8,6 +8,8 @@ API_VERSION = dict(v1='v1',
 
 urlpatterns = [
     url(r'^$', 'api.views.api_version_root'),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+
 ]
 
 for version_name, version in API_VERSION.items():

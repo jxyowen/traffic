@@ -31,14 +31,6 @@ class GeneratorSerializer(serializers.HyperlinkedModelSerializer):
                   'streams'
         )
 
-        read_only_fields = (
-                          'ip',
-                          'id',
-                          'port_in_use',
-                          # 'status',
-                          # 'mode',
-                          'streams'
-        )
 
 class StreamSerializer(serializers.HyperlinkedModelSerializer):
     # owner = serializers.ReadOnlyField(source='owner.username')
@@ -114,7 +106,7 @@ class ProtocolSerializer(serializers.HyperlinkedModelSerializer):
                   'id'
                   )
 
-        read_only_fields = (
-                          'configuration',
-                          'id'
-        )
+        # read_only_fields = (
+        #                   'configuration',
+        #                   'id'
+        # )

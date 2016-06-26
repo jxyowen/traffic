@@ -1,9 +1,9 @@
 # -*- coding:utf-8 -*-
 import traceback
-import re
 
-from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework import permissions
+
 from rest_framework import status as http_response_status
 
 from rest_framework_extensions.mixins import NestedViewSetMixin
@@ -14,7 +14,6 @@ from utils.nsr_log import log_nsr_service
 from utils.HWS5700SwitchController import HWS5700SwitchController
 
 from .serializers import *
-from .permissions import IsOwnerOrReadOnly
 
 
 class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
@@ -27,15 +26,8 @@ class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     """
     queryset = SwitchModel.objects.all()
     serializer_class = SwitchSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly)
 
-    # def list_response_data_process(self, data, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #
-    #
-    # def retrieve_response_data_process(self, data, request, *args, **kwargs):
-    #     instance = self.get_object()
 
 
 
@@ -49,8 +41,6 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
     """
     queryset = VLANModel.objects.all()
     serializer_class = VLANSerializer
-    permission_classes = (# permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
 
     def get_queryset(self):
         return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
