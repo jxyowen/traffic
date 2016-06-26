@@ -116,5 +116,5 @@ class VLANModel(models.Model):
         return 'id: %s  mode: %s ' % (self.id, self.mode)
 
 
-admin.site.register(GeneratorModel)
-admin.site.register(SwitchModel)
+# admin.site.register(GeneratorModel)
+# admin.site.register(SwitchModel)
