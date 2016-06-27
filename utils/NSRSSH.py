@@ -8,10 +8,9 @@ import traceback
 from utils.nsr_log import log_hw_s5700
 
 
-
 class NSRSSH(object):
 
-    def __init__(self, timeout=30, try_login_max_times=3):
+    def __init__(self, timeout=30, try_login_max_times=1):
         self._cmd_exec_result = -2
         self.__timeout = timeout
         self.__try_login_max_times = try_login_max_times
@@ -27,7 +26,7 @@ class NSRSSH(object):
         :return:ssh连接实例
 
         '''
-
+        log_hw_s5700.info('Login Info: ip: %s user: %s password: %s logged_in_symbol: %s' % (user, password, ip, logged_in_symbol))
         ssh_newkey = 'Are you sure you want to continue connecting'
 
         is_logged_in = False
@@ -46,14 +45,15 @@ class NSRSSH(object):
 
             if 0 == i or 1 == i:
                 self._print_error()
-
                 if try_login_times < self.__try_login_max_times:
                     is_try_login = True
                 else:
                     if 0 == i:
                         self._cmd_exec_result = -1
+                        raise Exception(self._child.before, self._child.after)
                     elif 1 == i:
                         self._cmd_exec_result = -2
+                        raise Exception(self._child.before, self._child.after)
                     return self
             elif 2 == i:  # SSH does not have the public key. Just accept it.
                 self._child.sendline('yes')

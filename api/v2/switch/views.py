@@ -46,6 +46,17 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
     def get_queryset(self):
         return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
 
+    def perform_update_vlan_status_changed(self, switch_controller, vlan_id, status, initial_data, instance):
+        if self.find_key_and_value_be_modified('status', initial_data, instance):
+            if status == VLANEnum.STATUS_IDLE:
+                switch_controller.traffic_remove(vlan_id)
+                switch_controller.acl_remove(vlan_id)
+                switch_controller.vlan_remove(vlan_id)
+            elif status == VLANEnum.STATUS_USED:
+                switch_controller.vlan_add(vlan_id)
+                switch_controller.acl_add(vlan_id)
+                switch_controller.acl_add_deny_any()
+
     def perform_update(self, serializer):
         self.perform_error_status = None
         instance = self.get_object()
@@ -59,6 +70,8 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
 
             self.value_cannot_be_modified('vlan_id', initial_data, instance)
 
+            log_nsr_service.warning('begin connect')
+
             switch_controller = SwitchEnum.CLASS_MAPPING[switch.type]()
             switch_controller.connect(user=switch.user,
                                       password=switch.password,
@@ -66,15 +79,9 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
                                       logged_in_symbol=switch.logged_in_symbol)
             switch_controller.enter_system_view()
 
-            if self.find_key_and_value_be_modified('status', initial_data, instance):
-                if status == VLANEnum.STATUS_IDLE:
-                    switch_controller.traffic_remove(vlan_id)
-                    switch_controller.acl_remove(vlan_id)
-                    switch_controller.vlan_remove(vlan_id)
-                elif status == VLANEnum.STATUS_USED:
-                    switch_controller.vlan_add(vlan_id)
-                    switch_controller.acl_add(vlan_id)
-                    switch_controller.acl_add_deny_any()
+            log_nsr_service.warning('begin sec')
+
+            self.perform_update_vlan_status_changed(switch_controller, vlan_id, status, initial_data, instance)
 
             if self.find_key_and_value_be_modified('mode', initial_data, instance):
                 pass

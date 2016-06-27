@@ -87,7 +87,8 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['vlan ' + vlan_id, '\[Quidway-vlan' + vlan_id + '\]'],
+                                  ['vlan %s' % vlan_id, '\[Quidway-vlan%s\]' % vlan_id],
+                                  # ['vlan ' + vlan_id, '\[Quidway-vlan' + vlan_id + '\]'],
                                   ['quit', '\[Quidway\]'],
 
         ]
@@ -117,9 +118,8 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                             ['undo interface vlanif ' + vlan_id, '\[Quidway\]'],#1.1删除对应id的vlanif
-                             ['undo vlan ' + vlan_id, '\[Quidway\]'],#1.2删除对应id的vlan
-
+                             ['undo interface vlanif %s' % vlan_id, '\[Quidway\]'],#1.1删除对应id的vlanif
+                             ['undo vlan %s' % vlan_id, '\[Quidway\]'], #1.2删除对应id的vlan
         ]
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
         return self
