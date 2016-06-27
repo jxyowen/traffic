@@ -31,7 +31,7 @@ class NSRSSH(object):
         :return:ssh连接实例
 
         '''
-        log_hw_s5700.info('Login Info: ip: %s user: %s password: %s logged_in_symbol: %s' % (self.__user, self.__password, self.__ip, self._system_name))
+        log_hw_s5700.info('Login Info: ip: %s user: %s password: %s system_name: %s' % (self.__user, self.__password, self.__ip, self._system_name))
         ssh_newkey = 'Are you sure you want to continue connecting'
 
         is_logged_in = False

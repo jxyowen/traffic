@@ -72,7 +72,7 @@ class SwitchModel(models.Model):
     id = models.PositiveIntegerField(primary_key=True, verbose_name="ID")
     created = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField(default='127.0.0.1')
-    logged_in_symbol = models.CharField(max_length=30)
+    system_name = models.CharField(max_length=30)
     type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     name = models.CharField(max_length=50, default='switch')
     user = models.CharField(max_length=50)

@@ -70,16 +70,14 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
 
             self.value_cannot_be_modified('vlan_id', initial_data, instance)
 
-            log_nsr_service.warning('begin connect')
 
             switch_controller = SwitchEnum.CLASS_MAPPING[switch.type](user=switch.user,
                                                                       password=switch.password,
                                                                       ip=switch.ip,
-                                                                      system_name=switch.logged_in_symbol)
+                                                                      system_name=switch.system_name)
             switch_controller.connect()
             switch_controller.enter_system_view()
 
-            log_nsr_service.warning('begin sec')
 
             self.perform_update_vlan_status_changed(switch_controller, vlan_id, status, initial_data, instance)
 
