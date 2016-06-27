@@ -41,13 +41,20 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
     """
     queryset = VLANModel.objects.all()
     serializer_class = VLANSerializer
-    permission_classes = (IsAuthenticatedOrNotPost, )
+    permission_classes = (IsAuthenticatedOrNotPostDelete, )
 
     def get_queryset(self):
         return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
 
+    def connect_switch_and_enter_system_view(self, switch_controller):
+        if not self.__is_switch_configurations_need_to_save:
+            self.__is_switch_configurations_need_to_save = True
+            switch_controller.connect()
+            switch_controller.enter_system_view()
+
     def perform_update_vlan_status_changed(self, switch_controller, vlan_id, status, initial_data, instance):
         if self.find_key_and_value_be_modified('status', initial_data, instance):
+            self.connect_switch_and_enter_system_view(switch_controller)
             if status == VLANEnum.STATUS_IDLE:
                 switch_controller.traffic_remove(vlan_id)
                 switch_controller.acl_remove(vlan_id)
@@ -56,6 +63,12 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
                 switch_controller.vlan_add(vlan_id)
                 switch_controller.acl_add(vlan_id)
                 switch_controller.acl_add_deny_any()
+
+    def perform_update_vlan_mode_changed(self):
+        pass
+
+    def perform_update_vlan_traffic_changed(self):
+        pass
 
     def perform_update(self, serializer):
         self.perform_error_status = None
@@ -67,28 +80,25 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
         mode = self.perform_get_data(initial_data=initial_data, field='mode', model_instance=instance)
         traffic = self.perform_get_data(initial_data=initial_data, field='traffic', model_instance=instance)
         try:
+            self.__is_switch_configurations_need_to_save = False
 
             self.value_cannot_be_modified('vlan_id', initial_data, instance)
-
 
             switch_controller = SwitchEnum.CLASS_MAPPING[switch.type](user=switch.user,
                                                                       password=switch.password,
                                                                       ip=switch.ip,
                                                                       system_name=switch.system_name)
-            switch_controller.connect()
-            switch_controller.enter_system_view()
 
 
             self.perform_update_vlan_status_changed(switch_controller, vlan_id, status, initial_data, instance)
 
-            if self.find_key_and_value_be_modified('mode', initial_data, instance):
-                pass
+            self.perform_update_vlan_mode_changed()
 
-            if self.find_key_and_value_be_modified('traffic', initial_data, instance):
-                pass
+            self.perform_update_vlan_traffic_changed()
 
-            switch_controller.save_config()
-            switch_controller.disconnect()
+            if self.__is_switch_configurations_need_to_save:
+                switch_controller.save()
+                switch_controller.disconnect()
 
             serializer.save()
             log_nsr_service.warning('Setup successful')

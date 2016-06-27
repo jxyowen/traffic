@@ -79,7 +79,7 @@ class HWS5700SwitchController(NSRSSH):
         self._exec_command_sequence(input_expect_pairs_list)
         return self
 
-    def save_config(self):
+    def save(self):
         input_expect_pairs_list = [
                                   ['quit', self.__switch_user_view],
                                   ['save', 'continue?'],
@@ -588,7 +588,7 @@ if __name__ == "__main__":
             hw_s5700.acl_remove(vlan)
             hw_s5700.vlan_remove(vlan)
 
-    hw_s5700.save_config()
+    hw_s5700.save()
     hw_s5700.disconnect()
 
     if 0 == hw_s5700.get_cmd_exec_result():
