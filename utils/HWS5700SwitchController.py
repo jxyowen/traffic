@@ -341,7 +341,7 @@ class HWS5700SwitchController(NSRSSH):
         #1.命令序列设置
         input_expect_pairs_list = [
                                   ['acl %s' % acl_number,  '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],#1.1进入对应acl_number的acl
-                                  ['rule permit ip source %s destination %s' % (rule_info['src_ip_with_mask'], rule_info['dst_ip_with_mask']), '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],#1.2允许对应源ip和目的ip的流量通过
+                                  ['rule %s permit ip source %s destination %s' % (rule_info['number'], rule_info['src_ip_with_mask'], rule_info['dst_ip_with_mask']), '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],#1.2允许对应源ip和目的ip的流量通过
                                   ['quit', self.__switch_system_view],#1.3退出acl
         ]
 
