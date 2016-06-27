@@ -3,7 +3,7 @@ import json
 import traceback
 
 from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import permissions as official_permissions
 
 from rest_framework import status as http_response_status
 
@@ -32,7 +32,7 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
     """
     queryset = GeneratorModel.objects.all()
     serializer_class = GeneratorSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    permission_classes = (official_permissions.IsAuthenticatedOrReadOnly, )
 
 
     def generator_parameters_fetch_from_drone(self, generator):

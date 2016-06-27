@@ -4,6 +4,8 @@ import re
 from rest_framework.response import Response
 from rest_framework import status as http_response_status
 
+from utils.nsr_log import log_nsr_service
+
 class ModelViewSetExtension():
     def perform_get_data(self, initial_data, field, model_instance):
         if field in initial_data:
@@ -11,12 +13,16 @@ class ModelViewSetExtension():
         else:
             return getattr(model_instance, field, None)
 
-    def find_key_and_value_changed(self, key, data, model_instance):
+    def find_key_and_value_be_modified(self, key, data, model_instance):
         request_value = data.get(key, None)
         model_instance_value = getattr(model_instance, key, None)
-        if (request_value is not None) and (request_value != model_instance_value):
+        if (request_value is not None) and (str(request_value) != str(model_instance_value)):
             return True
         return False
+
+    def value_cannot_be_modified(self, key, data, model_instance):
+        if self.find_key_and_value_be_modified(key, data, model_instance):
+            raise Exception(key + ' cannot be modified!')
 
     def add_url(self, data, request, pk=None):
         data['url'] = 'http://' + request.get_host() + request.path

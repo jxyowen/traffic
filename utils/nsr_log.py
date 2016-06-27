@@ -78,7 +78,7 @@ def nsr_logger(logger_name='', is_console_enabled=False, log_file_path_list=[], 
 
     return logger
 
-log_root = nsr_logger(logger_name='')
+log_root = nsr_logger(logger_name='nsr')
 
 # log_hw_s5700 = nsr_logger(logger_name='hw_s5700',
 #                           log_file_path_list=[r'/var/www/nsr/resource/vswitches/hw_s5700.log'],
@@ -93,8 +93,8 @@ log_hw_s5700 = nsr_logger(logger_name='hw_s5700',
                           log_level=LOG_LEVEL)
 
 log_nsr_service = nsr_logger(logger_name='service',
-                             # log_file_path_list=[r'c:/service.log'],
-                             log_file_path_list=[r'/Users/jixiaoyu/Desktop/github_clone/traffic.log'],
+                             log_file_path_list=[r'c:/service.log'],
+                             # log_file_path_list=[r'/Users/jixiaoyu/Desktop/github_clone/traffic.log'],
                              log_format=FORMATTER,
                              log_level=LOG_LEVEL)
 #

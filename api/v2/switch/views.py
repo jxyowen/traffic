@@ -2,16 +2,16 @@
 import traceback
 
 from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import permissions as official_permissions
 
 from rest_framework import status as http_response_status
 
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from api.rest_framework_common_extensions.ModelViewSetExtensions import ModelViewSetExtension
+from api.rest_framework_common_extensions.permissions import *
 
 from utils.nsr_log import log_nsr_service
-from utils.HWS5700SwitchController import HWS5700SwitchController
 
 from .serializers import *
 
@@ -26,7 +26,7 @@ class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     """
     queryset = SwitchModel.objects.all()
     serializer_class = SwitchSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
+    permission_classes = (official_permissions.IsAuthenticatedOrReadOnly, )
 
 
 
@@ -41,6 +41,7 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
     """
     queryset = VLANModel.objects.all()
     serializer_class = VLANSerializer
+    permission_classes = (IsAuthenticatedOrNotPost, )
 
     def get_queryset(self):
         return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
@@ -57,15 +58,14 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
         try:
             switch_controller = SwitchEnum.CLASS_MAPPING[switch.type]()
             switch_controller.connect(user=switch.user,
-                             password=switch.password,
-                             ip=switch.ip,
-                             logged_in_symbol=switch.logged_in_symbol)
+                                      password=switch.password,
+                                      ip=switch.ip,
+                                      logged_in_symbol=switch.logged_in_symbol)
             switch_controller.enter_system_view()
 
-            if self.find_key_and_value_changed('vlan_id', initial_data, instance):
-                raise Exception('vlan_id cannot be modified!')
+            self.value_cannot_be_modified('vlan_id', initial_data, instance)
 
-            if self.find_key_and_value_changed('status', initial_data, instance):
+            if self.find_key_and_value_be_modified('status', initial_data, instance):
                 if status == VLANEnum.STATUS_IDLE:
                     switch_controller.traffic_remove(vlan_id)
                     switch_controller.acl_remove(vlan_id)
@@ -75,10 +75,10 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
                     switch_controller.acl_add(vlan_id)
                     switch_controller.acl_add_deny_any()
 
-            if self.find_key_and_value_changed('mode', initial_data, instance):
+            if self.find_key_and_value_be_modified('mode', initial_data, instance):
                 pass
 
-            if self.find_key_and_value_changed('traffic', initial_data, instance):
+            if self.find_key_and_value_be_modified('traffic', initial_data, instance):
                 pass
 
             switch_controller.save_config()
