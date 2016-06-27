@@ -56,14 +56,15 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
         mode = self.perform_get_data(initial_data=initial_data, field='mode', model_instance=instance)
         traffic = self.perform_get_data(initial_data=initial_data, field='traffic', model_instance=instance)
         try:
+
+            self.value_cannot_be_modified('vlan_id', initial_data, instance)
+
             switch_controller = SwitchEnum.CLASS_MAPPING[switch.type]()
             switch_controller.connect(user=switch.user,
                                       password=switch.password,
                                       ip=switch.ip,
                                       logged_in_symbol=switch.logged_in_symbol)
             switch_controller.enter_system_view()
-
-            self.value_cannot_be_modified('vlan_id', initial_data, instance)
 
             if self.find_key_and_value_be_modified('status', initial_data, instance):
                 if status == VLANEnum.STATUS_IDLE:
