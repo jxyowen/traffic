@@ -10,7 +10,7 @@ from rest_framework import status as http_response_status
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from api.rest_framework_common_extensions.ModelViewSetExtensions import ModelViewSetExtension
-from api.const import *
+from api.rest_framework_common_extensions.permissions import *
 
 from ostinato_light.drone import Drone
 from ostinato_light.port_list import PortList
@@ -32,7 +32,7 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
     """
     queryset = GeneratorModel.objects.all()
     serializer_class = GeneratorSerializer
-    permission_classes = (official_permissions.IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrNotPostDelete, )
 
 
     def generator_parameters_fetch_from_drone(self, generator):
@@ -116,13 +116,20 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
     def configure_stream_list(self, generator_id, stream_list):
         streams = StreamModel.objects.filter(generator=generator_id)
         for stream in streams:
-            stream_configuration = json.loads(stream.configuration)
-            # for k,v in stream_configuration.items():
-            #     log_nsr_service.warning(k + '  ' + str(v))
+            try:
+                stream_configuration = json.loads(stream.configuration)
+            except:
+                stream_configuration = None
+                log_nsr_service.warning('stream_configuration json format error: %s' % stream.configuration)
+
             protocols = ProtocolModel.objects.filter(stream=stream.id)
             protocol_list = list()
             for protocol in protocols:
-                protocol_configuration = json.loads(protocol.configuration)
+                try:
+                    protocol_configuration = json.loads(protocol.configuration)
+                except:
+                    protocol_configuration = None
+                    log_nsr_service.warning('protocol_configuration json format error: %s' % protocol.configuration)
                 protocol_object = self.configure_protocol(protocol_configuration)
                 if protocol_object is not None:
                     protocol_list.append(protocol_object)
@@ -140,6 +147,10 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
         host_name = self.perform_get_data(initial_data=initial_data, field='ip', model_instance=instance)
         self.perform_error_status = None
         try:
+            self.value_cannot_be_modified('id', initial_data, instance)
+            self.value_cannot_be_modified('ip', initial_data, instance)
+            self.value_cannot_be_modified('port_in_use', initial_data, instance)
+
             if 'status' in initial_data.keys():
                 tx_port_list = PortList()
                 tx_port_list.add_port(port_number=tx_port_number)
