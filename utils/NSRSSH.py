@@ -10,8 +10,13 @@ from utils.nsr_log import log_hw_s5700
 
 class NSRSSH(object):
 
-    def __init__(self, timeout=30, try_login_max_times=1):
+    def __init__(self, ip=None, user=None, password=None, system_name='', timeout=30, try_login_max_times=1):
+        assert ip
         self._cmd_exec_result = -2
+        self.__ip = ip
+        self.__user = user
+        self.__password = password
+        self._system_name = system_name
         self.__timeout = timeout
         self.__try_login_max_times = try_login_max_times
         self._child = None
@@ -19,14 +24,14 @@ class NSRSSH(object):
     def get_cmd_exec_result(self):
         return self._cmd_exec_result
 
-    def connect(self, user, password, ip, logged_in_symbol=''):
+    def connect(self):
         '''
         建立ssh连接
         :param login_info:登录信息，包括目标主机ip,用户名，密码
         :return:ssh连接实例
 
         '''
-        log_hw_s5700.info('Login Info: ip: %s user: %s password: %s logged_in_symbol: %s' % (user, password, ip, logged_in_symbol))
+        log_hw_s5700.info('Login Info: ip: %s user: %s password: %s logged_in_symbol: %s' % (self.__user, self.__password, self.__ip, self._system_name))
         ssh_newkey = 'Are you sure you want to continue connecting'
 
         is_logged_in = False
@@ -36,12 +41,12 @@ class NSRSSH(object):
             #1.ssh命令登录
             if is_try_login:
                 try_login_times += 1
-                os.system('sudo ssh-keygen -f "/root/.ssh/known_hosts" -R ' + ip)
-                self._child = pexpect.spawn('ssh -l ' + user + ' ' + ip,
+                os.system('sudo ssh-keygen -f "/root/.ssh/known_hosts" -R ' + self.__ip)
+                self._child = pexpect.spawn('ssh -l ' + self.__user + ' ' + self.__ip,
                                       timeout=self.__timeout)
                 is_try_login = False
 
-            i = self._child.expect([pexpect.TIMEOUT, pexpect.EOF, ssh_newkey, 'assword: ', logged_in_symbol])
+            i = self._child.expect([pexpect.TIMEOUT, pexpect.EOF, ssh_newkey, 'assword: ', self._system_name])
 
             if 0 == i or 1 == i:
                 self._print_error()
@@ -58,7 +63,7 @@ class NSRSSH(object):
             elif 2 == i:  # SSH does not have the public key. Just accept it.
                 self._child.sendline('yes')
             elif 3 == i:
-                self._child.sendline(password)
+                self._child.sendline(self.__password)
             elif 4 == i:
                 self._print_debug_info()
                 self._cmd_exec_result = 0

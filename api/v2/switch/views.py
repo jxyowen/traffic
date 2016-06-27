@@ -72,11 +72,11 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
 
             log_nsr_service.warning('begin connect')
 
-            switch_controller = SwitchEnum.CLASS_MAPPING[switch.type]()
-            switch_controller.connect(user=switch.user,
-                                      password=switch.password,
-                                      ip=switch.ip,
-                                      logged_in_symbol=switch.logged_in_symbol)
+            switch_controller = SwitchEnum.CLASS_MAPPING[switch.type](user=switch.user,
+                                                                      password=switch.password,
+                                                                      ip=switch.ip,
+                                                                      system_name=switch.logged_in_symbol)
+            switch_controller.connect()
             switch_controller.enter_system_view()
 
             log_nsr_service.warning('begin sec')

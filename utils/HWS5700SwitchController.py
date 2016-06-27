@@ -19,14 +19,25 @@ class HWS5700SwitchController(NSRSSH):
     #                      timeout=timeout, try_login_max_times=try_login_max_times)
     #     self.__acl_number_shift = acl_number_shift
 
-    def __init__(self, timeout=30, acl_number_shift=1000):
-        super(self.__class__, self).__init__(timeout=timeout)
+     # def __init__(self, ip, user, password, system_name='', timeout=30, try_login_max_times=1, acl_number_shift=1000):
+     #    super(self.__class__, self).__init__(ip=ip,
+     #                                         user=user,
+     #                                         password=password,
+     #                                         system_name=system_name,
+     #                                         try_login_max_times=try_login_max_times,
+     #                                         timeout=timeout)
+     #    self.__acl_number_shift = acl_number_shift
+
+    def __init__(self, acl_number_shift=1000, **kwargs):
+        super(self.__class__, self).__init__(**kwargs)
         self.__acl_number_shift = acl_number_shift
+        self.__switch_user_view = '<%s>' % self._system_name
+        self.__switch_system_view = '\[%s\]' % self._system_name
 
     def get_vlan_list(self):
         vlan_list = []
         if self._cmd_exec_result == 0:
-            each_pair = ['display vlan', '\[Quidway\]']
+            each_pair = ['display vlan', self.__switch_system_view]
             self._print_debug_info(each_pair)
             self._child.sendline(each_pair[0])
 
@@ -62,7 +73,7 @@ class HWS5700SwitchController(NSRSSH):
 
     def enter_system_view(self):
         input_expect_pairs_list = [
-                             ['system-view', '\[Quidway\]'],
+                             ['system-view', self.__switch_system_view],
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)
@@ -70,9 +81,9 @@ class HWS5700SwitchController(NSRSSH):
 
     def save_config(self):
         input_expect_pairs_list = [
-                                  ['quit', '<Quidway>'],
+                                  ['quit', self.__switch_user_view],
                                   ['save', 'continue?'],
-                                  ['Y', '<Quidway>'],
+                                  ['Y', self.__switch_user_view],
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)
@@ -87,9 +98,8 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['vlan %s' % vlan_id, '\[Quidway-vlan%s\]' % vlan_id],
-                                  # ['vlan ' + vlan_id, '\[Quidway-vlan' + vlan_id + '\]'],
-                                  ['quit', '\[Quidway\]'],
+                                  ['vlan %s' % vlan_id, '\[%s-vlan%s\]' % (self._system_name, vlan_id)],
+                                  ['quit', self.__switch_system_view],
 
         ]
         self._exec_command_sequence(input_expect_pairs_list)  # 2.执行命令序列
@@ -104,7 +114,7 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                             ['vlan batch ' + ' '.join([str(vlan_id) for vlan_id in vlan_id_list]), '\[Quidway\]'],#1.1创建对应id的vlan
+                             ['vlan batch ' + ' '.join([str(vlan_id) for vlan_id in vlan_id_list]), self.__switch_system_view],#1.1创建对应id的vlan
         ]
         self._exec_command_sequence(input_expect_pairs_list)  # 2.执行命令序列
         return self
@@ -118,8 +128,8 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                             ['undo interface vlanif %s' % vlan_id, '\[Quidway\]'],#1.1删除对应id的vlanif
-                             ['undo vlan %s' % vlan_id, '\[Quidway\]'], #1.2删除对应id的vlan
+                             ['undo interface vlanif %s' % vlan_id, self.__switch_system_view],#1.1删除对应id的vlanif
+                             ['undo vlan %s' % vlan_id, self.__switch_system_view], #1.2删除对应id的vlan
         ]
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
         return self
@@ -137,9 +147,9 @@ class HWS5700SwitchController(NSRSSH):
         #1.命令序列设置
         input_expect_pairs_list = [
 
-                                  ['interface vlanif ' + vlan_id, '\[Quidway-Vlanif' + vlan_id + '\]'],#1.1进入对应id的vlanif
-                                  ['ip address ' + vlanif_info['gateway'] + ' ' + vlanif_info['type'], '\[Quidway-Vlanif' + vlan_id + '\]'],#1.2添加网关ip
-                                  ['quit', '\[Quidway\]'],#1.3退出vlanif
+                                  ['interface vlanif %s' % vlan_id, '\[%s-Vlanif%s\]' % (self._system_name, vlan_id)],#1.1进入对应id的vlanif
+                                  ['ip address %s %s' % (vlanif_info['gateway'], vlanif_info['type']),  '\[%s-Vlanif%s\]' % (self._system_name, vlan_id)],#1.2添加网关ip
+                                  ['quit', self.__switch_system_view],#1.3退出vlanif
 
         ]
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
@@ -158,9 +168,9 @@ class HWS5700SwitchController(NSRSSH):
         #1.命令序列设置
         input_expect_pairs_list = [
 
-                                  ['interface vlanif ' + vlan_id, '\[Quidway-Vlanif' + vlan_id + '\]'],#1.1进入对应id的vlanif
-                                  ['undo ip address ' + vlanif_info['gateway'] + ' ' + vlanif_info['type'], '\[Quidway-Vlanif' + vlan_id + '\]'],#1.2删除网关ip
-                                  ['quit', '\[Quidway\]'],#1.3退出vlanif
+                                  ['interface vlanif %s' % vlan_id, '\[%s-Vlanif%s\]' % (self._system_name, vlan_id)],#1.1进入对应id的vlanif
+                                  ['undo ip address %s %s' % (vlanif_info['gateway'], vlanif_info['type']), '\[%s-Vlanif%s\]' % (self._system_name, vlan_id)],#1.2删除网关ip
+                                  ['quit', self.__switch_system_view],#1.3退出vlanif
 
         ]
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
@@ -175,7 +185,7 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['undo interface vlanif ' + vlan_id, '\[Quidway\]'],#1.1删除对应id的vlanif
+                                  ['undo interface vlanif %s' % vlan_id, self.__switch_system_view],#1.1删除对应id的vlanif
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
@@ -191,14 +201,14 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['undo port-group all', '\[Quidway\]'],#1.1删除所有端口组
-                                  ['port-group vlan_group_tmp', '\[Quidway-port-group-vlan_group_tmp\]'],#1.2创建临时端口组
-                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[Quidway-port-group-vlan_group_tmp\]'],#1.3将对应id的vlan加入临时端口组
+                                  ['undo port-group all', self.__switch_system_view],#1.1删除所有端口组
+                                  ['port-group vlan_group_tmp', '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.2创建临时端口组
+                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.3将对应id的vlan加入临时端口组
 
-                                  ['undo port trunk allow-pass vlan 2 to 4094', '\[Quidway-port-group-vlan_group_tmp\]'],#1.4删除端口组内vlan的trunk信息
-                                  ['undo port default vlan', '\[Quidway-port-group-vlan_group_tmp\]'],#1.5删除端口组内vlan的access信息
-                                  ['undo port link-type', '\[Quidway-port-group-vlan_group_tmp\]'],#1.6删除端口组内vlan的配置类型
-                                  ['quit', '\[Quidway\]'],#1.7退出临时端口组
+                                  ['undo port trunk allow-pass vlan 2 to 4094', '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.4删除端口组内vlan的trunk信息
+                                  ['undo port default vlan', '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.5删除端口组内vlan的access信息
+                                  ['undo port link-type','\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.6删除端口组内vlan的配置类型
+                                  ['quit', self.__switch_system_view],#1.7退出临时端口组
 
         ]
 
@@ -215,12 +225,12 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['undo port-group all', '\[Quidway\]'],#1.1删除所有端口组
-                                  ['port-group vlan_group_tmp', '\[Quidway-port-group-vlan_group_tmp\]'],#1.2创建临时端口组
-                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[Quidway-port-group-vlan_group_tmp\]'],#1.3将对应id的vlan加入临时端口组
-                                  ['port link-type access',  '\[Quidway-port-group-vlan_group_tmp\]'],#1.4将端口组内端口配置为access类型
-                                  ['port default vlan ' + vlan_id, '\[Quidway-port-group-vlan_group_tmp\]'],#1.5配置为access的vlan信息
-                                  ['quit', '\[Quidway\]'],#1.6退出临时端口组
+                                  ['undo port-group all', self.__switch_system_view],#1.1删除所有端口组
+                                  ['port-group vlan_group_tmp',  '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.2创建临时端口组
+                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]),  '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.3将对应id的vlan加入临时端口组
+                                  ['port link-type access',   '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.4将端口组内端口配置为access类型
+                                  ['port default vlan %s' % vlan_id, '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.5配置为access的vlan信息
+                                  ['quit', self.__switch_system_view],#1.6退出临时端口组
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
@@ -236,12 +246,12 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['undo port-group all', '\[Quidway\]'],#1.1删除所有端口组
-                                  ['port-group vlan_group_tmp', '\[Quidway-port-group-vlan_group_tmp\]'],#1.2创建临时端口组
-                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[Quidway-port-group-vlan_group_tmp\]'],#1.3将对应id的vlan加入临时端口组
-                                  ['port link-type trunk',  '\[Quidway-port-group-vlan_group_tmp\]'],#1.4将端口组内端口配置为trunk类型
-                                  ['port trunk allow-pass vlan ' + ' '.join([str(vlan_id_tmp) for vlan_id_tmp in vlan_id_group]), '\[Quidway-port-group-vlan_group_tmp\]'],#1.5配置允许通过vlan信息
-                                  ['quit', '\[Quidway\]'],#1.6退出临时端口组
+                                  ['undo port-group all', self.__switch_system_view],#1.1删除所有端口组
+                                  ['port-group vlan_group_tmp', '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.2创建临时端口组
+                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.3将对应id的vlan加入临时端口组
+                                  ['port link-type trunk',   '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.4将端口组内端口配置为trunk类型
+                                  ['port trunk allow-pass vlan ' + ' '.join([str(vlan_id_tmp) for vlan_id_tmp in vlan_id_group]),  '\[%s-port-group-vlan_group_tmp\]' % self._system_name],#1.5配置允许通过vlan信息
+                                  ['quit', self.__switch_system_view],#1.6退出临时端口组
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
@@ -251,12 +261,12 @@ class HWS5700SwitchController(NSRSSH):
     def eth_port_config_trunk_vlan_allowpass_all(self, port_group):
 
         input_expect_pairs_list = [
-                                  ['undo port-group all', '\[Quidway\]'],
-                                  ['port-group vlan_group_tmp', '\[Quidway-port-group-vlan_group_tmp\]'],
-                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[Quidway-port-group-vlan_group_tmp\]'],
-                                  ['port link-type trunk',  '\[Quidway-port-group-vlan_group_tmp\]'],
-                                  ['port trunk allow-pass vlan all', '\[Quidway-port-group-vlan_group_tmp\]'],
-                                  ['quit', '\[Quidway\]'],
+                                  ['undo port-group all', self.__switch_system_view],
+                                  ['port-group vlan_group_tmp', '\[%s-port-group-vlan_group_tmp\]' % self._system_name],
+                                  ['group-member ' + ' '.join(['G0/0/'+str(port) for port in port_group]), '\[%s-port-group-vlan_group_tmp\]' % self._system_name],
+                                  ['port link-type trunk',  '\[%s-port-group-vlan_group_tmp\]' % self._system_name],
+                                  ['port trunk allow-pass vlan all', '\[%s-port-group-vlan_group_tmp\]' % self._system_name],
+                                  ['quit', self.__switch_system_view],
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)
@@ -274,11 +284,8 @@ class HWS5700SwitchController(NSRSSH):
         acl_number = str(int(vlan_id) + self.__acl_number_shift)
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  #['undo acl ' + acl_number, '\[Quidway\]'],
-                                  ['acl ' + acl_number, '\[Quidway-acl-adv-' + acl_number + '\]'],#1.1创建对应acl_number的acl
-                                  #['rule 4294967294 deny ip', '\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  #['display this', 'rule 4294967294 deny ip'],
-                                  ['quit', '\[Quidway\]'],#1.1退出对应acl_number的acl
+                                  ['acl %s' % acl_number, '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],#1.1创建对应acl_number的acl
+                                  ['quit', self.__switch_system_view],#1.2退出对应acl_number的acl
 
         ]
 
@@ -296,7 +303,7 @@ class HWS5700SwitchController(NSRSSH):
 
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['undo acl ' + acl_number, '\[Quidway\]'],#1.1移除对应acl_number的acl
+                                  ['undo acl %s' % acl_number, self.__switch_system_view],#1.1移除对应acl_number的acl
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)#2.执行命令序列
@@ -311,10 +318,9 @@ class HWS5700SwitchController(NSRSSH):
         '''
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['acl 2000', '\[Quidway-acl-basic-2000\]'],#1.1创建acl_number为2000的acl
-                                  ['rule deny', '\[Quidway-acl-basic-2000\]'],#1.2规则设置为拒绝所有ip流量
-                                  #['display this', 'rule 4294967294 deny ip'],
-                                  ['quit', '\[Quidway\]'],#1.3退出acl
+                                  ['acl 2000', '\[%s-acl-basic-2000\]' % self._system_name],#1.1创建acl_number为2000的acl
+                                  ['rule deny', '\[%s-acl-basic-2000\]' % self._system_name],#1.2规则设置为拒绝所有ip流量
+                                  ['quit', self.__switch_system_view],#1.3退出acl
         ]
 
         #2.执行命令序列
@@ -334,14 +340,9 @@ class HWS5700SwitchController(NSRSSH):
 
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['acl ' + acl_number, '\[Quidway-acl-adv-' + acl_number + '\]'],#1.1进入对应acl_number的acl
-                                  #['undo rule 4294967294', '\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  ['rule ' + ' permit ip source ' + rule_info['src_ip_with_mask'] + ' destination ' + rule_info['dst_ip_with_mask'],#1.2允许对应源ip和目的ip的流量通过
-                                   '\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  #['rule ' + rule_info['rule_num'] + ' permit ip source ' + rule_info['src_ip_with_mask'] + ' destination ' + rule_info['dst_ip_with_mask'],
-                                  #'\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  #['rule 4294967294 deny ip', '\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  ['quit', '\[Quidway\]'],#1.3退出acl
+                                  ['acl %s' % acl_number,  '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],#1.1进入对应acl_number的acl
+                                  ['rule permit ip source %s destination %s' % (rule_info['src_ip_with_mask'], rule_info['dst_ip_with_mask']), '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],#1.2允许对应源ip和目的ip的流量通过
+                                  ['quit', self.__switch_system_view],#1.3退出acl
         ]
 
         #2.执行命令序列
@@ -354,9 +355,9 @@ class HWS5700SwitchController(NSRSSH):
         acl_number = str(int(vlan_id) + self.__acl_number_shift)
 
         input_expect_pairs_list = [
-                                  ['acl ' + acl_number, '\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  ['undo rule ' + rule_info['rule_num'], '\[Quidway-acl-adv-' + acl_number + '\]'],
-                                  ['quit', '\[Quidway\]'],
+                                  ['acl %s' % acl_number,  '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],
+                                  ['undo rule %s' % rule_info['rule_num'],  '\[%s-acl-adv-%s\]' % (self._system_name, acl_number)],
+                                  ['quit', self.__switch_system_view],
         ]
 
         self._exec_command_sequence(input_expect_pairs_list)
@@ -370,31 +371,28 @@ class HWS5700SwitchController(NSRSSH):
         :param vlan_id:
         :return:
         '''
-        traffic_classifier_name = 'c_vlan_' + vlan_id
-        traffic_behavior_name = 'b_vlan_' + vlan_id
-        traffic_policy_name = 'p_vlan_' + vlan_id
+        traffic_classifier_name = 'c_vlan_%s' % vlan_id
+        traffic_behavior_name = 'b_vlan_%s' % vlan_id
+        traffic_policy_name = 'p_vlan_%s' % vlan_id
         acl_number = str(int(vlan_id) + self.__acl_number_shift)
 
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['traffic classifier ' + traffic_classifier_name, '\[Quidway-classifier-' + traffic_classifier_name + '\]'],#1.1创建流分类
-                                  ['if-match ' + 'acl ' + acl_number, '\[Quidway-classifier-' + traffic_classifier_name + '\]'],#1.2绑定acl
-                                  ['if-match ' + 'acl 2000', '\[Quidway-classifier-' + traffic_classifier_name + '\]'],#1.3绑定acl_number为 2000的acl
-                                  #['display this', 'if-match ' + 'acl ' + acl_number],
-                                  ['quit', '\[Quidway\]'],#1.4退出acl
+                                  ['traffic classifier ' + traffic_classifier_name, '\[%s-classifier-%s\]' % (self._system_name, traffic_classifier_name)],#1.1创建流分类
+                                  ['if-match acl %s' % acl_number, '\[%s-classifier-%s\]' % (self._system_name, traffic_classifier_name)],#1.2绑定acl
+                                  ['if-match acl 2000', '\[%s-classifier-%s\]' % (self._system_name, traffic_classifier_name)],#1.3绑定acl_number为 2000的acl
+                                  ['quit', self.__switch_system_view],#1.4退出acl
 
-                                  ['traffic behavior ' + traffic_behavior_name, '\[Quidway-behavior-' + traffic_behavior_name + '\]'],#1.5创建流行为
-                                  ['quit', '\[Quidway\]'],#1.6退出流行为
+                                  ['traffic behavior ' + traffic_behavior_name, '\[%s-behavior-%s\]' % (self._system_name, traffic_behavior_name)],#1.5创建流行为
+                                  ['quit', self.__switch_system_view],#1.6退出流行为
 
-                                  ['traffic policy ' + traffic_policy_name, '\[Quidway-trafficpolicy-' + traffic_policy_name + '\]'],#1.6创建流策略
-                                  ['classifier ' + traffic_classifier_name + ' behavior ' + traffic_behavior_name,'\[Quidway-trafficpolicy-' + traffic_policy_name + '\]'],#1.7绑定流分类和流行为
-                                  #['display this', 'classifier ' + traffic_classifier_name + ' behavior ' + traffic_behavior_name],
-                                  ['quit', '\[Quidway\]'],#1.8退出流策略
+                                  ['traffic policy ' + traffic_policy_name, '\[%s-trafficpolicy-%s\]' % (self._system_name, traffic_policy_name)],#1.6创建流策略
+                                  ['classifier ' + traffic_classifier_name + ' behavior ' + traffic_behavior_name, '\[%s-trafficpolicy-%s\]' % (self._system_name, traffic_policy_name)],#1.7绑定流分类和流行为
+                                  ['quit', self.__switch_system_view],#1.8退出流策略
 
-                                  ['vlan ' + vlan_id, '\[Quidway-vlan' + vlan_id + '\]'],#1.9进入对应id的vlan
-                                  ['traffic-policy ' + traffic_policy_name + ' inbound', '\[Quidway-vlan' + vlan_id + '\]'],#1.10绑定流策略
-                                  #['display this', 'traffic-policy ' + traffic_policy_name + ' inbound'],
-                                  ['quit', '\[Quidway\]'],#1.11退出vlan
+                                  ['vlan %s' % vlan_id, '\[%s-vlan%s\]' % (self._system_name, vlan_id)],#1.9进入对应id的vlan
+                                  ['traffic-policy ' + traffic_policy_name + ' inbound', '\[%s-vlan%s\]' % (self._system_name, vlan_id)],#1.10绑定流策略
+                                  ['quit', self.__switch_system_view],#1.11退出vlan
         ]
 
         #2.执行命令序列
@@ -409,21 +407,21 @@ class HWS5700SwitchController(NSRSSH):
         :param vlan_id:
         :return:
         '''
-        traffic_classifier_name = 'c_vlan_' + vlan_id
-        traffic_behavior_name = 'b_vlan_' + vlan_id
-        traffic_policy_name = 'p_vlan_' + vlan_id
+        traffic_classifier_name = 'c_vlan_%s' % vlan_id
+        traffic_behavior_name = 'b_vlan_%s' % vlan_id
+        traffic_policy_name = 'p_vlan_%s' % vlan_id
         acl_number = str(int(vlan_id) + self.__acl_number_shift)
         #1.命令序列设置
         input_expect_pairs_list = [
-                                  ['vlan ' + vlan_id, '\[Quidway-vlan' + vlan_id + '\]'],#1.1进入对应id的vlan
-                                  ['undo traffic-policy ' + traffic_policy_name + ' inbound', '\[Quidway-vlan' + vlan_id + '\]'],#1.2取消vlan与流策略的绑定
-                                  ['quit', '\[Quidway\]'],#1.3退出vlan
+                                  ['vlan %s' % vlan_id, '\[%s-vlan%s\]' % (self._system_name, vlan_id)],#1.1进入对应id的vlan
+                                  ['undo traffic-policy ' + traffic_policy_name + ' inbound', '\[%s-vlan%s\]' % (self._system_name, vlan_id)],#1.2取消vlan与流策略的绑定
+                                  ['quit', self.__switch_system_view],#1.3退出vlan
 
-                                  ['undo traffic policy ' + traffic_policy_name, '\[Quidway\]'],#1.4清除流策略
+                                  ['undo traffic policy ' + traffic_policy_name, self.__switch_system_view],#1.4清除流策略
 
-                                  ['undo traffic classifier ' + traffic_classifier_name, '\[Quidway\]'],#1.4清除流分类
+                                  ['undo traffic classifier ' + traffic_classifier_name, self.__switch_system_view],#1.4清除流分类
 
-                                  ['undo traffic behavior ' + traffic_behavior_name, '\[Quidway\]'],#1.4清除流行为
+                                  ['undo traffic behavior ' + traffic_behavior_name, self.__switch_system_view],#1.4清除流行为
 
         ]
         #2.执行命令序列

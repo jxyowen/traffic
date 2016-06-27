@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a2285e13-c6a2-4e13-ae58-6beb4f92a340" name="Default" comment="log">
+    <list default="true" id="a2285e13-c6a2-4e13-ae58-6beb4f92a340" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/HWS5700SwitchController.py" afterPath="$PROJECT_DIR$/utils/HWS5700SwitchController.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/NSRSSH.py" afterPath="$PROJECT_DIR$/utils/NSRSSH.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/nsr_log.py" afterPath="$PROJECT_DIR$/utils/nsr_log.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/v2/switch/views.py" afterPath="$PROJECT_DIR$/api/v2/switch/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="traffic.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -64,8 +64,8 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/v2/switch/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1264" max-vertical-offset="2970">
-              <caret line="99" column="35" selection-start-line="99" selection-start-column="28" selection-end-line="99" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1912" max-vertical-offset="2970">
+              <caret line="92" column="32" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
               <folding>
                 <element signature="e#23#39#0" expanded="true" />
               </folding>
@@ -73,54 +73,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NSRSSH.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/utils/NSRSSH.py">
+      <file leaf-file-name="HWS5700SwitchController.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/utils/HWS5700SwitchController.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.5224915" vertical-offset="2754" max-vertical-offset="3861">
-              <caret line="21" column="58" selection-start-line="21" selection-start-column="42" selection-end-line="21" selection-end-column="58" />
+            <state vertical-scroll-proportion="0.45901638" vertical-offset="1903" max-vertical-offset="16335">
+              <caret line="85" column="63" selection-start-line="85" selection-start-column="45" selection-end-line="85" selection-end-column="63" />
               <folding>
-                <element signature="e#46#55#0" expanded="true" />
+                <element signature="e#45#55#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HWS5700SwitchController.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/HWS5700SwitchController.py">
+      <file leaf-file-name="NSRSSH.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/utils/NSRSSH.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2747" max-vertical-offset="16335">
-              <caret line="122" column="9" selection-start-line="122" selection-start-column="9" selection-end-line="122" selection-end-column="9" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="nsr_log.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/utils/nsr_log.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2970">
-              <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/api/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="567">
-              <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/traffic/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="783">
-              <caret line="4" column="9" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
-              <folding />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2857" max-vertical-offset="3996">
+              <caret line="118" column="53" selection-start-line="118" selection-start-column="53" selection-end-line="118" selection-end-column="53" />
+              <folding>
+                <element signature="e#46#55#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -148,9 +120,9 @@
         <option value="$PROJECT_DIR$/api/v2/generator/views.py" />
         <option value="$PROJECT_DIR$/api/rest_framework_common_extensions/permissions.py" />
         <option value="$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py" />
-        <option value="$PROJECT_DIR$/api/v2/switch/views.py" />
         <option value="$PROJECT_DIR$/utils/nsr_log.py" />
         <option value="$PROJECT_DIR$/utils/NSRSSH.py" />
+        <option value="$PROJECT_DIR$/api/v2/switch/views.py" />
         <option value="$PROJECT_DIR$/utils/HWS5700SwitchController.py" />
       </list>
     </option>
@@ -671,13 +643,18 @@
       <created>1466907508579</created>
       <updated>1466907508579</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="log">
+      <created>1466998685824</created>
+      <updated>1466998685824</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -693,7 +670,6 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -761,7 +737,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="918" max-vertical-offset="5913">
           <caret line="34" column="60" selection-start-line="34" selection-start-column="60" selection-end-line="34" selection-end-column="60" />
           <folding>
-            <element signature="e#23#34#0" expanded="true" />
+            <element signature="e#23#34#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -831,7 +807,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="34" column="60" selection-start-line="34" selection-start-column="60" selection-end-line="34" selection-end-column="60" />
           <folding>
-            <element signature="e#23#34#0" expanded="true" />
+            <element signature="e#23#34#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -867,7 +843,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="200" column="6" selection-start-line="200" selection-start-column="6" selection-end-line="200" selection-end-column="6" />
           <folding>
-            <element signature="e#23#34#0" expanded="true" />
+            <element signature="e#23#34#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -969,7 +945,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#23#34#0" expanded="true" />
+            <element signature="e#23#34#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1044,7 +1020,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="2999" max-vertical-offset="5913">
           <caret line="34" column="46" selection-start-line="34" selection-start-column="46" selection-end-line="34" selection-end-column="46" />
           <folding>
-            <element signature="e#23#34#0" expanded="true" />
+            <element signature="e#23#34#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1091,14 +1067,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/pexpect/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2457">
@@ -1141,6 +1109,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/api/v2/switch/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1912" max-vertical-offset="2970">
+          <caret line="92" column="32" selection-start-line="92" selection-start-column="32" selection-end-line="92" selection-end-column="32" />
+          <folding>
+            <element signature="e#23#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/utils/nsr_log.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2970">
@@ -1149,30 +1127,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/v2/switch/views.py">
+    <entry file="file://$PROJECT_DIR$/api/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1264" max-vertical-offset="2970">
-          <caret line="99" column="35" selection-start-line="99" selection-start-column="28" selection-end-line="99" selection-end-column="35" />
-          <folding>
-            <element signature="e#23#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/utils/HWS5700SwitchController.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2747" max-vertical-offset="16335">
-          <caret line="122" column="9" selection-start-line="122" selection-start-column="9" selection-end-line="122" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
+          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/NSRSSH.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.5224915" vertical-offset="2754" max-vertical-offset="3861">
-          <caret line="21" column="58" selection-start-line="21" selection-start-column="42" selection-end-line="21" selection-end-column="58" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2857" max-vertical-offset="3996">
+          <caret line="118" column="53" selection-start-line="118" selection-start-column="53" selection-end-line="118" selection-end-column="53" />
           <folding>
             <element signature="e#46#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils/HWS5700SwitchController.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.45901638" vertical-offset="1903" max-vertical-offset="16335">
+          <caret line="85" column="63" selection-start-line="85" selection-start-column="45" selection-end-line="85" selection-end-column="63" />
+          <folding>
+            <element signature="e#45#55#0" expanded="true" />
           </folding>
         </state>
       </provider>
