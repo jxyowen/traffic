@@ -20,8 +20,9 @@ class ModelViewSetExtension():
             return True
         return False
 
-    def value_cannot_be_modified(self, key, data, model_instance):
-        if self.find_key_and_value_be_modified(key, data, model_instance):
+    def value_cannot_be_modified(self, key, data, model_instance, request):
+        if self.find_key_and_value_be_modified(key, data, model_instance) \
+        and (not (request.user and request.user.is_authenticated())):
             raise Exception(key + ' cannot be modified!')
 
     def add_url(self, data, request, pk=None):
@@ -83,7 +84,7 @@ class ModelViewSetExtension():
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        self.perform_update(serializer, request)
         data = serializer.data
         self.update_response_data_process(data, request, *args, **kwargs)
         if self.perform_error_status:
@@ -94,7 +95,7 @@ class ModelViewSetExtension():
     def update_response_data_process(self, data, request, *args, **kwargs):
         pass
 
-    def perform_update(self, serializer):
+    def perform_update(self, serializer, request):
         self.perform_error_status = None
         serializer.save()
 

@@ -70,7 +70,7 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
     def perform_update_vlan_traffic_changed(self):
         pass
 
-    def perform_update(self, serializer):
+    def perform_update(self, serializer, request):
         self.perform_error_status = None
         instance = self.get_object()
         initial_data = serializer.initial_data
@@ -82,7 +82,7 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
         try:
             self.__is_switch_configurations_need_to_save = False
 
-            self.value_cannot_be_modified('vlan_id', initial_data, instance)
+            self.value_cannot_be_modified('vlan_id', initial_data, instance, request)
 
             switch_controller = SwitchEnum.CLASS_MAPPING[switch.type](user=switch.user,
                                                                       password=switch.password,

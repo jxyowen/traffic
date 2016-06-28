@@ -137,7 +137,7 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
                 stream_list.add_stream(**stream_configuration)
                 stream_list.current_stream.configure_protocols(*protocol_list)
 
-    def perform_update(self, serializer):
+    def perform_update(self, serializer, request):
         instance = self.get_object()
         initial_data = serializer.initial_data
         generator_id = self.perform_get_data(initial_data=initial_data, field='id', model_instance=instance)
@@ -147,9 +147,9 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
         host_name = self.perform_get_data(initial_data=initial_data, field='ip', model_instance=instance)
         self.perform_error_status = None
         try:
-            self.value_cannot_be_modified('id', initial_data, instance)
-            self.value_cannot_be_modified('ip', initial_data, instance)
-            self.value_cannot_be_modified('port_in_use', initial_data, instance)
+            self.value_cannot_be_modified('id', initial_data, instance, request)
+            self.value_cannot_be_modified('ip', initial_data, instance, request)
+            self.value_cannot_be_modified('port_in_use', initial_data, instance, request)
 
             if 'status' in initial_data.keys():
                 tx_port_list = PortList()
