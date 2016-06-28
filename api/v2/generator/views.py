@@ -34,6 +34,10 @@ class GeneratorViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.Model
     serializer_class = GeneratorSerializer
     permission_classes = (IsAuthenticatedOrNotPostDelete, )
 
+    def queryset_filter_fields(self):
+        fields = ['id', 'ip', 'port_in_use']
+        return fields
+
 
     def generator_parameters_fetch_from_drone(self, generator):
         try:
@@ -203,8 +207,13 @@ class StreamViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     queryset = StreamModel.objects.all()
     serializer_class = StreamSerializer
 
-    def get_queryset(self):
-        return self.queryset.filter(generator=self.kwargs['parent_lookup_generator_pk'])
+    def queryset_filter_params(self):
+        params = dict(generator=self.kwargs['parent_lookup_generator_pk'])
+        return params
+
+    def queryset_filter_fields(self):
+        fields = ['id']
+        return fields
 
     def foreign_key_information(self):
         foreign_key_information = dict(model=GeneratorModel, field_name='generator', list_name='generators')
@@ -215,10 +224,13 @@ class ProtocolViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelV
     queryset = ProtocolModel.objects.all()
     serializer_class = ProtocolSerializer
 
-    def get_queryset(self):
-        return self.queryset.filter(stream=self.kwargs['parent_lookup_stream_pk'],
-                                    # generator=self.kwargs['parent_lookup_generator_pk']
-        )
+    def queryset_filter_params(self):
+        params = dict(stream=self.kwargs['parent_lookup_stream_pk'])
+        return params
+
+    def queryset_filter_fields(self):
+        fields = ['id']
+        return fields
 
     def foreign_key_information(self):
         foreign_key_information = dict(model=StreamModel, field_name='stream', list_name='streams')

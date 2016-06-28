@@ -28,7 +28,9 @@ class SwitchViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelVie
     serializer_class = SwitchSerializer
     permission_classes = (official_permissions.IsAuthenticatedOrReadOnly, )
 
-
+    def queryset_filter_fields(self):
+        fields = ['name']
+        return fields
 
 
 class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewSet):
@@ -43,8 +45,17 @@ class VLANViewSet(ModelViewSetExtension, NestedViewSetMixin, viewsets.ModelViewS
     serializer_class = VLANSerializer
     permission_classes = (IsAuthenticatedOrNotPostDelete, )
 
-    def get_queryset(self):
-        return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
+    # def get_queryset(self):
+    #     return self.queryset.filter(switch=self.kwargs['parent_lookup_switch_pk'])
+
+    def queryset_filter_params(self):
+        params = dict(switch=self.kwargs['parent_lookup_switch_pk'])
+        return params
+
+    def queryset_filter_fields(self):
+        fields = ['vlan_id']
+        return fields
+
 
     def connect_switch_and_enter_system_view(self, switch_controller):
         if not self.__is_switch_configurations_need_to_save:
