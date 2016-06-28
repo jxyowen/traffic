@@ -31,6 +31,7 @@ class GeneratorModel(models.Model):
 
     class Meta:
         ordering = ('id',)
+        unique_together = (("ip", "port_in_use"),)
 
     def __unicode__(self):
         return 'id: %s  ip: %s ' % (self.id, self.ip)
