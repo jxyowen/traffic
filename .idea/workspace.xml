@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a2285e13-c6a2-4e13-ae58-6beb4f92a340" name="Default" comment="log">
+    <list default="true" id="a2285e13-c6a2-4e13-ae58-6beb4f92a340" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py" afterPath="$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/v2/generator/views.py" afterPath="$PROJECT_DIR$/api/v2/generator/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/v2/switch/views.py" afterPath="$PROJECT_DIR$/api/v2/switch/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/models.py" afterPath="$PROJECT_DIR$/api/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="traffic.iws" />
@@ -94,11 +92,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/api/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.72879463" vertical-offset="2344" max-vertical-offset="3375">
+              <caret line="114" column="0" selection-start-line="114" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28373703" vertical-offset="3885" max-vertical-offset="6210">
-              <caret line="153" column="45" selection-start-line="153" selection-start-column="45" selection-end-line="153" selection-end-column="45" />
+            <state vertical-scroll-proportion="-18.724138" vertical-offset="3885" max-vertical-offset="6210">
+              <caret line="164" column="55" selection-start-line="164" selection-start-column="55" selection-end-line="164" selection-end-column="55" />
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
               </folding>
@@ -143,10 +151,10 @@
         <option value="$PROJECT_DIR$/utils/NSRSSH.py" />
         <option value="$PROJECT_DIR$/api/rest_framework_common_extensions/permissions.py" />
         <option value="$PROJECT_DIR$/utils/HWS5700SwitchController.py" />
-        <option value="$PROJECT_DIR$/api/models.py" />
         <option value="$PROJECT_DIR$/api/v2/switch/views.py" />
         <option value="$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py" />
         <option value="$PROJECT_DIR$/api/v2/generator/views.py" />
+        <option value="$PROJECT_DIR$/api/models.py" />
       </list>
     </option>
   </component>
@@ -686,7 +694,11 @@
       <created>1467015261374</created>
       <updated>1467015261374</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="value change add auth">
+      <created>1467076160786</created>
+      <updated>1467076160786</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -753,7 +765,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="log" />
-    <option name="LAST_COMMIT_MESSAGE" value="log" />
+    <MESSAGE value="value change add auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="value change add auth" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1128,14 +1141,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.69866073" vertical-offset="2425" max-vertical-offset="3348">
-          <caret line="116" column="0" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python27/Lib/site-packages/rest_framework/viewsets.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.5479911" vertical-offset="3262" max-vertical-offset="4158">
@@ -1182,11 +1187,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28373703" vertical-offset="3885" max-vertical-offset="6210">
-          <caret line="153" column="45" selection-start-line="153" selection-start-column="45" selection-end-line="153" selection-end-column="45" />
+        <state vertical-scroll-proportion="-18.724138" vertical-offset="3885" max-vertical-offset="6210">
+          <caret line="164" column="55" selection-start-line="164" selection-start-column="55" selection-end-line="164" selection-end-column="55" />
           <folding>
             <element signature="e#23#34#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.72879463" vertical-offset="2344" max-vertical-offset="3375">
+          <caret line="114" column="0" selection-start-line="114" selection-start-column="0" selection-end-line="114" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

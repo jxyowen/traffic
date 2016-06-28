@@ -111,6 +111,7 @@ class VLANModel(models.Model):
 
     class Meta:
         ordering = ('vlan_id',)
+        unique_together = (("switch", "vlan_id"),)
 
     def __unicode__(self):
         return 'id: %s  mode: %s ' % (self.id, self.mode)
