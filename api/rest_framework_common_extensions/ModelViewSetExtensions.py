@@ -40,8 +40,8 @@ class ModelViewSetExtension():
         datas = serializer.data
 
         for data in datas:
-            self.add_url(data, request, data['id'])
             self.list_response_data_process(data, request, *args, **kwargs)
+            self.add_url(data, request, data['id'])
 
         return Response(datas)
 
