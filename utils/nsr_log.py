@@ -93,7 +93,7 @@ try:
                               log_level=LOG_LEVEL)
 
     log_nsr_service = nsr_logger(logger_name='service',
-                                 # log_file_path_list=[r'c:/service.log'],
+                                 log_file_path_list=[r'c:/service.log'],
                                  # log_file_path_list=[r'/home/restful_test/service.log'],
                                  # log_file_path_list=[r'/Users/jixiaoyu/Desktop/github_clone/traffic.log'],
                                  log_format=FORMATTER,

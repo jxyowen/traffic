@@ -1,6 +1,7 @@
 __author__ = 'jxy'
 
 import re
+import traceback
 
 from django.db.models.query import QuerySet
 
@@ -20,14 +21,12 @@ class ModelViewSetExtension():
         queryset = self.queryset
         if isinstance(queryset, QuerySet):
             # Ensure queryset is re-evaluated on each request.
-
-            # queryset = queryset.all()
-
             queryset_filter_params = self.queryset_filter_params()
             queryset = self.queryset_filter_from_params(queryset, **queryset_filter_params)
 
-            queryset_filter_fields = self.queryset_filter_fields()
-            queryset = self.queryset_filter_from_url_params(queryset, *queryset_filter_fields)
+            # queryset_filter_fields = self.queryset_filter_fields()
+            # queryset = self.queryset_filter_from_url_params(queryset, *queryset_filter_fields)
+            queryset = self.queryset_filter_from_url_params(queryset)
 
         return queryset
 
@@ -35,29 +34,42 @@ class ModelViewSetExtension():
         return {}
 
     def queryset_filter_fields(self):
-        return []
+        return self.queryset.model._meta.get_all_field_names()
 
     def queryset_filter_from_params(self, queryset, **kwargs):
-
-        if len(kwargs) > 0:
+        try:
             queryset = queryset.filter(**kwargs)
-        else:
+        except Exception, e:
             queryset = queryset.all()
-
+            log_nsr_service.warning(traceback.format_exc())
+            log_nsr_service.warning(e)
+            log_nsr_service.warning('filter failed')
         return queryset
 
     def queryset_filter_from_url_params(self, queryset, *args):
+        # queryset_filter_dict = {}
+        #
+        # for field in args:
+        #     log_nsr_service.warning(self.request.query_params)
+        #     value = self.request.query_params.get(field, None)
+        #     if value:
+        #         queryset_filter_dict[field] = value
+        # if len(queryset_filter_dict) > 0:
+        #     queryset = queryset.filter(**queryset_filter_dict)
+        # else:
+        #     queryset = queryset.all()
+        #
+        # return queryset
         queryset_filter_dict = {}
-
-        for field in args:
-            value = self.request.query_params.get(field, None)
-            if value:
-                queryset_filter_dict[field] = value
-        if len(queryset_filter_dict) > 0:
+        for field in self.request.query_params.keys():
+            queryset_filter_dict[field] = self.request.query_params.get(field, None)
+        try:
             queryset = queryset.filter(**queryset_filter_dict)
-        else:
+        except Exception, e:
             queryset = queryset.all()
-
+            log_nsr_service.warning(traceback.format_exc())
+            log_nsr_service.warning(e)
+            log_nsr_service.warning('filter failed')
         return queryset
 
     def perform_get_data(self, initial_data, field, model_instance):
