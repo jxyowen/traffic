@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a2285e13-c6a2-4e13-ae58-6beb4f92a340" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/nsr_log.py" afterPath="$PROJECT_DIR$/utils/nsr_log.py" />
     </list>
     <ignored path="traffic.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,8 +49,8 @@
       <file leaf-file-name="nsr_log.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/nsr_log.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.08" vertical-offset="2288" max-vertical-offset="3645">
-              <caret line="96" column="32" selection-start-line="96" selection-start-column="32" selection-end-line="96" selection-end-column="32" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2263" max-vertical-offset="3645">
+              <caret line="91" column="30" selection-start-line="91" selection-start-column="30" selection-end-line="91" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -66,10 +66,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ModelViewSetExtensions.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ModelViewSetExtensions.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="4860">
+            <state vertical-scroll-proportion="-0.3013393" vertical-offset="1539" max-vertical-offset="4860">
               <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
               <folding>
                 <element signature="e#20#29#0" expanded="true" />
@@ -78,10 +78,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="2.8683035" vertical-offset="3019" max-vertical-offset="6183">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3019" max-vertical-offset="6183">
               <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
               <folding>
                 <element signature="e#23#34#0" expanded="true" />
@@ -110,10 +110,10 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/utils/nsr_log.py" />
         <option value="$PROJECT_DIR$/api/v2/generator/views.py" />
         <option value="$PROJECT_DIR$/api/v2/switch/views.py" />
         <option value="$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py" />
+        <option value="$PROJECT_DIR$/utils/nsr_log.py" />
       </list>
     </option>
   </component>
@@ -1165,14 +1165,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/nsr_log.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.08" vertical-offset="2288" max-vertical-offset="3645">
-          <caret line="96" column="32" selection-start-line="96" selection-start-column="32" selection-end-line="96" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/api/v2/switch/views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="729" max-vertical-offset="2889">
@@ -1181,22 +1173,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py">
+    <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="4860">
-          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="3019" max-vertical-offset="6183">
+          <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
           <folding>
-            <element signature="e#20#29#0" expanded="true" />
+            <element signature="e#23#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/api/v2/generator/views.py">
+    <entry file="file://$PROJECT_DIR$/utils/nsr_log.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="2.8683035" vertical-offset="3019" max-vertical-offset="6183">
-          <caret line="207" column="0" selection-start-line="207" selection-start-column="0" selection-end-line="207" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2263" max-vertical-offset="3645">
+          <caret line="91" column="30" selection-start-line="91" selection-start-column="30" selection-end-line="91" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/api/rest_framework_common_extensions/ModelViewSetExtensions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.3013393" vertical-offset="1539" max-vertical-offset="4860">
+          <caret line="47" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
           <folding>
-            <element signature="e#23#34#0" expanded="true" />
+            <element signature="e#20#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
